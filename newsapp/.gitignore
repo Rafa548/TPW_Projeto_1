@@ -1,0 +1,5 @@
+*.log
+*.pyc
+find . -name "*.pyc" -exec git rm -f "{}" \;
+*.ipynb
+*.sqlite3

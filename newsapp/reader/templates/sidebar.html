@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My News Website</title>
+    <style>
+        /* Add your custom CSS here to style your navbar */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        ul.navbar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul.navbar-menu li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        ul.navbar-menu li a {
+            text-decoration: none;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar-container">
+            <a class="navbar-brand" href="{% url 'Home' %}?search=top">YN</a>
+            <ul class="navbar-menu">
+                <li><a href="{% url 'Home' %}?search=Business">Business</a></li>
+                <li><a href="{% url 'Home' %}?search=Technology">Technology</a></li>
+                <li><a href="{% url 'Home' %}?search=Entertainment">Entertainment</a></li>
+                <li><a href="{% url 'Home' %}?search=Sports">Sports</a></li>
+                <li><a href="{% url 'Home' %}?search=Science">Science</a></li>
+                <li><a href="{% url 'Home' %}?search=Health">Health</a></li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>

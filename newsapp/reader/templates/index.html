@@ -1,0 +1,123 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>News App</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div>
+        {% include 'sidebar.html' %}
+    </div>
+    <style>
+        
+    .container {
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+
+    .card {
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    .img-box img {
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+        object-fit: cover;
+    }
+
+    #loading {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    </style>
+
+    <div class="container" id="articles-container">
+        <div class="row">
+            {% for value in data %}
+            <div class="col-md-3">
+                <div class="card box">
+                    <img src="{{ value.image }}" class="card-img-top" alt="Article Image">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{{ value.url }}" target="_blank">{{ value.title }}</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <h1 id="loading">Loading....</h1>
+
+    <script>
+    $(document).ready(function() {
+        console.log( "ready!" );
+        el = document.getElementsByClassName("text-muted")
+        for (i = 0; i < el.length; i++) {
+            t = document.getElementsByClassName("text-muted")[i].innerText
+            var d = new Date(t)
+            document.getElementsByClassName("text-muted")[i].innerText = d.toDateString()
+        }
+    });
+
+    var page = 2;
+    var window_scroll = true;
+    var search = "{{ search }}";
+
+    window.addEventListener('scroll', function(e) {
+        console.log("scroll check...")
+        if(window_scroll){
+            if((window.innerHeight + window.scrollY) >= (document.body.scrollHeight-200)){
+                window_scroll = false;
+                document.getElementById("loading").style.display = "block";
+                $.ajax({
+                    url: '/next?page=' + page + '&search=' + search,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data["success"]) {
+                            articles = data["data"]
+                            articles_html = ''
+                            for (i = 0; i < articles.length; i++) {
+                                articles_html += ' \
+                                <div class="col-md-3">\
+                                    <div class="card box">\
+                                        <img src="'+ articles[i]["image"] +'" class="card-img-top" alt="Article Image">\
+                                        <div class="card-body">\
+                                            <h5 class="card-title"><a href="'+ articles[i]["url"] +'" target="_blank">'+ articles[i]["title"] +'</a></h5>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                                '
+                            }
+                            $("#articles-container .row").append(articles_html);
+                            page += 1
+                            window_scroll = true;
+                            document.getElementById("loading").style.display = "none";
+                        }
+                        else {
+                            console.log("Failed")
+                            window_scroll = true;
+                            document.getElementById("loading").style.display = "none";
+                        }
+                    }
+                });
+            }
+        }
+    });
+    </script>
+</body>
+</html>
