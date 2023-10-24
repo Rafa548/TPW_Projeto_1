@@ -103,9 +103,10 @@ def search_results(request):
     if request.method == 'GET':
         query = request.GET.get('q', '')  # Get the search query from the request
         print("query:",query)
+        npage = request.GET.get('page', 1)
 
         url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-            query, "popularity", 1, settings.APIKEY
+            query, "popularity", npage, settings.APIKEY
         )
 
         r = requests.get(url=url)
@@ -128,7 +129,9 @@ def search_results(request):
         context = {
         "success": True,
         "data": [],
-        "search": query
+        "search": query,
+        "current_page": int(npage),
+        "page_range": range(1,6)
         }
 
         for i in data:
@@ -140,7 +143,7 @@ def search_results(request):
                 "description": "" if i["description"] is None else i["description"],
                 "url": i["url"],
                 "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
-                "publishedat": i["publishedAt"]
+                "publishedat": i["publishedAt"].split("T")[0]
             })
 
         return render(request, 'search-result.html', context=context)
