@@ -43,37 +43,20 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="static/img/logo.png" alt=""> -->
-        <h1>ZenBlog</h1>
+        <h1>ByteNewz</h1>
       </a>
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a href="index.html">Blog</a></li>
-          <li><a href="single-post.html">Single Post</a></li>
-          <li class="dropdown"><a href="category.html"><span>Categories</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-            <ul>
-              <li><a href="search-result.html">Search Result</a></li>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
-            </ul>
-          </li>
-
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="{% url 'category' %}?q=Business">Business</a></li>
+          <li><a href="{% url 'category' %}?q=Technology">Technology</a></li>
+          <li><a href="{% url 'category' %}?q=Entertainment">Entertainment</a></li>
+          <li><a href="{% url 'category' %}?q=Sports">Sports</a></li>
+          <li><a href="{% url 'category' %}?q=Science">Science</a></li>
+          <li><a href="{% url 'category' %}?q=Health">Health</a></li>
         </ul>
       </nav><!-- .navbar -->
 
@@ -85,14 +68,23 @@
         <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
         <i class="bi bi-list mobile-nav-toggle"></i>
 
+                <!-- search.html -->
+        {% block content %}
+        
         <!-- ======= Search Form ======= -->
         <div class="search-form-wrap js-search-form-wrap">
-          <form action="search-result.html" class="search-form">
+          <form action="{% url 'search_results' %}?q=q" method="get" class="search-form" id = "search-form">
             <span class="icon bi-search"></span>
-            <input type="text" placeholder="Search" class="form-control">
+            <input type="text" placeholder="Search" class="form-control" id = "search-input" name="q">
             <button class="btn js-search-close"><span class="bi-x"></span></button>
           </form>
         </div><!-- End Search Form -->
+        
+        
+        
+        {% endblock %}
+              
+              
 
       </div>
 
@@ -705,6 +697,20 @@
 
   <!-- Template Main JS File -->
   <script src="static/js/main.js"></script>
+
+  <script>
+    // Get the input field and form elements
+    var searchInput = document.getElementById("search-input");
+    var searchForm = document.getElementById("search-form");
+
+    // Add an event listener to the input field
+    searchInput.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            // If the "Enter" key is pressed, submit the form
+            searchForm.submit();
+        }
+    });
+</script>
 
 </body>
 

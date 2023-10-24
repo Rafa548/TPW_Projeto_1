@@ -129,6 +129,8 @@ STATIC_URL = '/static/'
 # )
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'reader/static')]
 
-APIKEY = "b147c9ae5a0b4b2ea438d7192a13aed5"
+#APIKEY = "b147c9ae5a0b4b2ea438d7192a13aed5"
+
+APIKEY = "fde47eb1fd3c4768964eb3d3bd9eaae2"
 
 

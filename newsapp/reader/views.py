@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 import requests
+from .forms import SearchForm
+
 
 temp_img = "https://images.pexels.com/photos/3225524/pexels-photo-3225524.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
 #  https://www.w3schools.com/code/tryit.asp?filename=GJ8R42LMFRLP
@@ -71,6 +73,119 @@ def home(request):
 
     # send the news feed to template in context
     return render(request, 'index.html', context=context)
+
+from django.shortcuts import render
+from .forms import SearchForm
+
+def search_results(request):
+    if request.method == 'GET':
+        query = request.GET.get('q', '')  # Get the search query from the request
+        print("query:",query)
+
+        url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+            query, "popularity", 1, settings.APIKEY
+        )
+
+        r = requests.get(url=url)
+
+        data = r.json()
+        if data["status"] != "ok":
+            return HttpResponse("<h1>Request Failed</h1>")
+        data = data["articles"]
+        # Process the query and obtain search results
+        # You can use Django's ORM or any other method to retrieve search results
+
+        # For example, if you have a model named 'Article' and want to search in its title field:
+        # search_results = Article.objects.filter(title__icontains=query)
+
+        #context = {
+        #    'query': query,
+            # 'search_results': search_results,  # Uncomment this line if you have search results to display
+        #}
+
+        context = {
+        "success": True,
+        "data": [],
+        "search": query
+        }
+
+        for i in data:
+            if i["title"] == "[Removed]":
+                continue
+            context["data"].append({
+                "title": i["title"],
+                "author": i["author"],
+                "description": "" if i["description"] is None else i["description"],
+                "url": i["url"],
+                "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                "publishedat": i["publishedAt"]
+            })
+
+        return render(request, 'search-result.html', context=context)
+
+    # Handle the case when the form is not submitted (e.g., first page load)
+    return render(request, 'search-result.html')
+
+
+
+
+
+
+def category(request):
+    if request.method == 'GET':
+        query = request.GET.get('q', '')  # Get the search query from the request
+        print("query:",query)
+        npage = request.GET.get('page', 1)  # Get the search query from the request
+
+        url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+            query, "popularity", npage, settings.APIKEY
+        )
+
+        r = requests.get(url=url)
+
+        data = r.json()
+        if data["status"] != "ok":
+            return HttpResponse("<h1>Request Failed</h1>")
+        data = data["articles"]
+        # Process the query and obtain search results
+        # You can use Django's ORM or any other method to retrieve search results
+
+        # For example, if you have a model named 'Article' and want to search in its title field:
+        # search_results = Article.objects.filter(title__icontains=query)
+
+        #context = {
+        #    'query': query,
+            # 'search_results': search_results,  # Uncomment this line if you have search results to display
+        #}
+
+        context = {
+        "success": True,
+        "data": [],
+        "search": query,
+        "current_page": int(npage),
+        "page_range": range(1,6)
+        }
+
+        print("page_range:",context["page_range"])
+        print("current_page:",context["current_page"])
+
+        for i in data:
+            if i["title"] == "[Removed]":
+                continue
+            context["data"].append({
+                "title": i["title"],
+                "author": i["author"],
+                "description": "" if i["description"] is None else i["description"],
+                "url": i["url"],
+                "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                "publishedat": i["publishedAt"]
+            })
+        print (len(context["data"]))
+
+        return render(request, 'category.html', context=context)
+
+    # Handle the case when the form is not submitted (e.g., first page load)
+    return render(request, 'category.html')
 
 
 def loadcontent(request):
