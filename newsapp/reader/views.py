@@ -19,8 +19,8 @@ def home(request):
         )
     else:
         # get the search query request
-        url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-            search,"popularity",page,settings.APIKEY
+        url = "https://newsapi.org/v2/everything?q={}&country={}&sortBy={}&page={}&apiKey={}".format(
+            search,"pt","popularity",page,settings.APIKEY
         )
     print("url:", url)
     r = requests.get(url=url)
@@ -32,6 +32,13 @@ def home(request):
     print("url:", url_sp)
     r_sp = requests.get(url=url_sp)
 
+    search_cul = "Culture"
+    url_cul = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+        search_cul, "popularity", page, settings.APIKEY
+    )
+    print("url:", url_cul)
+    r_cul = requests.get(url=url_cul)
+
     data = r.json()
     if data["status"] != "ok":
         return HttpResponse("<h1>Request Failed</h1>")
@@ -42,16 +49,24 @@ def home(request):
         return JsonResponse({"success": False})
     data_sp = data_sp["articles"]
 
+    data_cul = r_cul.json()
+    if data_cul["status"] != "ok":
+        return JsonResponse({"success": False})
+    data_cul = data_cul["articles"]
+
     context = {
         "success": True,
         "data": [],
         "Sport_Data": [],
+        "Culture_Data": [],
         "search": search
     }
 
 
-    # seprating the necessary data
+    # separating the necessary data
     for i in data:
+        if i["author"] is None:
+            i["author"] = "Anonymous"
         context["data"].append({
             "title": i["title"],
             "author": i["author"],
@@ -68,14 +83,21 @@ def home(request):
             "description": "" if i_sp["description"] is None else i_sp["description"],
             "url": i_sp["url"],
             "image": temp_img if i_sp["urlToImage"] is None else i_sp["urlToImage"],
-            "publishedat": i_sp["publishedAt"]
+            "publishedat": i_sp["publishedAt"].split("T")[0]
+        })
+
+    for i_cul in data_cul:
+        context["Culture_Data"].append({
+            "title": i_cul["title"],
+            "author": i_cul["author"],
+            "description": "" if i_cul["description"] is None else i_cul["description"],
+            "url": i_cul["url"],
+            "image": temp_img if i_cul["urlToImage"] is None else i_cul["urlToImage"],
+            "publishedat": i_cul["publishedAt"].split("T")[0]
         })
 
     # send the news feed to template in context
     return render(request, 'index.html', context=context)
-
-from django.shortcuts import render
-from .forms import SearchForm
 
 def search_results(request):
     if request.method == 'GET':
