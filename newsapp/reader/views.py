@@ -200,7 +200,7 @@ def category(request):
                 "description": "" if i["description"] is None else i["description"],
                 "url": i["url"],
                 "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
-                "publishedat": i["publishedAt"]
+                "publishedat": i["publishedAt"].split("T")[0]
             })
         print (len(context["data"]))
 
