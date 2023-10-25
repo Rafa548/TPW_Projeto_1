@@ -131,7 +131,7 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = (
 #     os.path.join(PROJECT_ROOT, 'static'),
 # )
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'reader/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'newsapp/static')]
 
 #APIKEY = "b147c9ae5a0b4b2ea438d7192a13aed5"
 

@@ -3,6 +3,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+    }
+    </style>
+    
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>ZenBlog Bootstrap Template - Index</title>
@@ -58,7 +70,7 @@
           <li><a href="{% url 'category' %}?q=Sports">Sports</a></li>
           <li><a href="{% url 'category' %}?q=Science">Science</a></li>
           <li><a href="{% url 'category' %}?q=Health">Health</a></li>
-          <li><a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a></li>
+            <li><a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a></li>
           <li><a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Sign-up</a></li>
         </ul>
       </nav><!-- .navbar -->
@@ -70,7 +82,7 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
 
                 <!-- search.html -->
-        {% block content %}
+        {% block header_content %}
         
         <!-- ======= Search Form ======= -->
         <div class="search-form-wrap js-search-form-wrap">
@@ -80,12 +92,8 @@
             <button class="btn js-search-close"><span class="bi-x"></span></button>
           </form>
         </div><!-- End Search Form -->
-        
-        
-        
+            
         {% endblock %}
-              
-              
 
       </div>
 
@@ -93,471 +101,13 @@
 
   </header><!-- End Header -->
 
-  <main id="main">
-
-    <!-- ======= Hero Slider Section ======= -->
-    <section id="hero-slider" class="hero-slider">
-      <div class="container" id="articles-container">
-    <div class="row">
-        <div class="col-12">
-            <!-- Hero Slider Section -->
-            <section id="hero-slider" class="hero-slider">
-                <div class="swiper sliderFeaturedPosts">
-                    <div class="swiper-wrapper">
-                        {% for value in data %}
-                            <div class="swiper-slide">
-                                <a href="{{ value.url }}" class="img-bg d-flex align-items-end" style="background-image: url('{{ value.image }}');">
-                                    <div class="img-bg-inner">
-                                        <h2>{{ value.title }}</h2>
-                                        <p>{{ value.description }}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="custom-swiper-button-next">
-                        <span class="bi-chevron-right"></span>
-                    </div>
-                    <div class="custom-swiper-button-prev">
-                        <span class="bi-chevron-left"></span>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </section>
-            <!-- End Hero Slider Section -->
+  <main id="main" class="container">
+      <div class="row mt-3">
+          <!-- messages -->
+          
+          <!-- content -->
+          {% block content %}{% endblock %}
         </div>
-    </div>
-</div>
-
-    </section><!-- End Hero Slider Section -->
-
-    <!-- ======= Post Grid Section ======= -->
-    <section id="posts" class="posts">
-      <div class="container" data-aos="fade-up">
-        <div class="row g-5">
-          <div class="col-lg-4">
-              {% if Sport_Data %}
-            <div class="post-entry-1 lg">
-              <a href="{{ Sport_Data.0.url }}"><img src={{ Sport_Data.0.image  }} alt="" class="img-fluid"></a>
-              <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ Sport_Data.0.publishedat }}</span></div>
-              <h2><a href={{ Sport_Data.0.url }}>{{Sport_Data.0.title}}</a></h2>
-              <p class="mb-4 d-block">{{ Sport_Data.0.description }}</p>
-
-              <div class="d-flex align-items-center author">
-                <div class="photo"><img src="static/img/person-1.jpg" alt="" class="img-fluid"></div>
-                <div class="name">
-                  <h3 class="m-0 p-0">{{ Sport_Data.0.author }}</h3>
-                </div>
-              </div>
-            </div>
-            {% endif %}
-          </div>
-
-          <div class="col-lg-8">
-            <div class="row g-5">
-              <div class="col-lg-4 border-start custom-border">
-                <div class="post-entry-1">
-                  <a href={{ Sport_Data.1.url }}><img src={{ Sport_Data.1.image }} alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ Sport_Data.0.publishedat }}</span></div>
-                  <h2><a href={{ Sport_Data.1.url }}>{{Sport_Data.1.title}}</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-5.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Food</span> <span class="mx-1">&bullet;</span> <span>Jul 17th '22</span></div>
-                  <h2><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-7.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Design</span> <span class="mx-1">&bullet;</span> <span>Mar 15th '22</span></div>
-                  <h2><a href="single-post.html">Why Craigslist Tampa Is One of The Most Interesting Places On the Web?</a></h2>
-                </div>
-              </div>
-              <div class="col-lg-4 border-start custom-border">
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-3.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2><a href="single-post.html">6 Easy Steps To Create Your Own Cute Merch For Instagram</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-6.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>Mar 1st '22</span></div>
-                  <h2><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-8.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Travel</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
-                </div>
-              </div>
-
-              <!-- Trending Section -->
-              <div class="col-lg-4">
-
-                <div class="trending">
-                  <h3>Trending</h3>
-                  <ul class="trending-post">
-                    <li>
-                      <a href={{ data.0.url }}>
-                        <span class="number">1</span>
-                        <h3>{{ data.0.title }}</h3>
-                        <span class="author">{{ data.0.author }}</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href={{ data.1.url }}>
-                        <span class="number">2</span>
-                        <h3>{{ data.1.title }}</h3>
-                        <span class="author">{{ data.1.author }}</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href={{ data.2.url }}>
-                        <span class="number">3</span>
-                        <h3>{{ data.2.title }}</h3>
-                        <span class="author">{{ data.2.author }}</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href={{ data.3.url }}>
-                        <span class="number">4</span>
-                        <h3>{{ data.3.title }}</h3>
-                        <span class="author">{{ data.3.author }}</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href={{ data.4.url }}>
-                        <span class="number">5</span>
-                        <h3>{{ data.4.title }}</h3>
-                        <span class="author">{{ data.4.author }}</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-
-              </div> <!-- End Trending Section -->
-            </div>
-          </div>
-
-        </div> <!-- End .row -->
-      </div>
-    </section> <!-- End Post Grid Section -->
-
-    <!-- ======= Culture Category Section ======= -->
-    <section class="category-section">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-header d-flex justify-content-between align-items-center mb-5">
-          <h2>Culture</h2>
-          <div><a href="category.html" class="more">See All Culture</a></div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-9">
-            {% if Culture_Data %}
-            <div class="d-lg-flex post-entry-2">
-              <a href="{{ Culture_Data.0.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
-                <img src={{ Culture_Data.0.image  }} alt="" class="img-fluid">
-              </a>
-              <div>
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.0.publishedat  }}</span></div>
-                <h3><a href={{ Culture_Data.0.url }}>{{ Culture_Data.0.title  }}</a></h3>
-                <p>{{ Culture_Data.0.description }}</p>
-                <div class="d-flex align-items-center author">
-                  <div class="name">
-                    <h3 class="m-0 p-0">{{ Culture_Data.0.author }}</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="post-entry-1 border-bottom">
-                  <a href="{{ Culture_Data.1.url  }}"><img src={{ Culture_Data.1.image  }}alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.1.publishedat }}</span></div>
-                  <h2 class="mb-2"><a href={{ Culture_Data.1.url  }}>{{ Culture_Data.1.title  }}</a></h2>
-                  <span class="author mb-3 d-block">{{ Culture_Data.1.author  }}</span>
-                  <p class="mb-4 d-block">{{ Culture_Data.1.description  }}</p>
-                </div>
-
-                <div class="post-entry-1">
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.2.publishedat }}</span></div>
-                  <h2 class="mb-2"><a href={{ Culture_Data.2.url  }}>{{ Culture_Data.2.title  }}</a></h2>
-                  <span class="author mb-3 d-block">{{ Culture_Data.2.author  }}</span>
-                </div>
-              </div>
-              <div class="col-lg-8">
-                <div class="post-entry-1">
-                  <a href={{ Culture_Data.3.url  }}><img src={{ Culture_Data.3.image  }} alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.3.publishedat  }}</span></div>
-                  <h2 class="mb-2"><a href={{ Culture_Data.3.url  }}>{{ Culture_Data.3.title  }}</a></h2>
-                  <span class="author mb-3 d-block">{{ Culture_Data.3.author  }}</span>
-                  <p class="mb-4 d-block">{{ Culture_Data.3.description  }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.4.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.4.url  }}>{{ Culture_Data.4.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.4.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.5.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.5.url  }}>{{ Culture_Data.5.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.5.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.6.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.6.url  }}>{{ Culture_Data.6.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.6.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.7.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.7.url  }}>{{ Culture_Data.7.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.7.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.8.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.8.url  }}>{{ Culture_Data.8.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.8.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.9.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.9.url  }}>{{ Culture_Data.9.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.9.author  }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-        {% endif %}
-    </section><!-- End Culture Category Section -->
-
-    <!-- ======= Business Category Section ======= -->
-    <section class="category-section">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-header d-flex justify-content-between align-items-center mb-5">
-          <h2>Business</h2>
-          <div><a href="category.html" class="more">See All Business</a></div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-9 order-md-2">
-
-            <div class="d-lg-flex post-entry-2">
-              <a href="single-post.html" class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
-                <img src="static/img/post-landscape-3.jpg" alt="" class="img-fluid">
-              </a>
-              <div>
-                <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h3><a href="single-post.html">What is the son of Football Coach John Gruden, Deuce Gruden doing Now?</a></h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos deleniti?</p>
-                <div class="d-flex align-items-center author">
-                  <div class="photo"><img src="static/img/person-4.jpg" alt="" class="img-fluid"></div>
-                  <div class="name">
-                    <h3 class="m-0 p-0">Wade Warren</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="post-entry-1 border-bottom">
-                  <a href="single-post.html"><img src="static/img/post-landscape-5.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                  <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
-                </div>
-
-                <div class="post-entry-1">
-                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-              </div>
-              <div class="col-lg-8">
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-7.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                  <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section><!-- End Business Category Section -->
-
-    <!-- ======= Lifestyle Category Section ======= -->
-    <section class="category-section">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-header d-flex justify-content-between align-items-center mb-5">
-          <h2>Lifestyle</h2>
-          <div><a href="category.html" class="more">See All Lifestyle</a></div>
-        </div>
-
-        <div class="row g-5">
-          <div class="col-lg-4">
-            <div class="post-entry-1 lg">
-              <a href="single-post.html"><img src="static/img/post-landscape-8.jpg" alt="" class="img-fluid"></a>
-              <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2><a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-              <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus exercitationem? Nihil tempore odit ab minus eveniet praesentium, similique blanditiis molestiae ut saepe perspiciatis officia nemo, eos quae cumque. Accusamus fugiat architecto rerum animi atque eveniet, quo, praesentium dignissimos</p>
-
-              <div class="d-flex align-items-center author">
-                <div class="photo"><img src="static/img/person-7.jpg" alt="" class="img-fluid"></div>
-                <div class="name">
-                  <h3 class="m-0 p-0">Esther Howard</h3>
-                </div>
-              </div>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-
-            <div class="post-entry-1">
-              <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-              <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-              <span class="author mb-3 d-block">Jenny Wilson</span>
-            </div>
-
-          </div>
-
-          <div class="col-lg-8">
-            <div class="row g-5">
-              <div class="col-lg-4 border-start custom-border">
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-6.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2><a href="single-post.html">Let’s Get Back to Work, New York</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-5.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 17th '22</span></div>
-                  <h2><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-4.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Mar 15th '22</span></div>
-                  <h2><a href="single-post.html">Why Craigslist Tampa Is One of The Most Interesting Places On the Web?</a></h2>
-                </div>
-              </div>
-              <div class="col-lg-4 border-start custom-border">
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-3.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2><a href="single-post.html">6 Easy Steps To Create Your Own Cute Merch For Instagram</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-2.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Mar 1st '22</span></div>
-                  <h2><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                </div>
-                <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-1.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
-                </div>
-              </div>
-              <div class="col-lg-4">
-
-                <div class="post-entry-1 border-bottom">
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-        </div> <!-- End .row -->
-      </div>
-    </section><!-- End Lifestyle Category Section -->
-
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -605,15 +155,16 @@
   <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="static/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="static/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="static/vendor/aos/aos.js"></script>
-  <script src="static/vendor/php-email-form/validate.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
   <!-- Template Main JS File -->
-  <script src="static/js/main.js"></script>
+  <script src={%  static '/js/main.js' %}></script>
 
     <script>
         // Get the input field and form elements
