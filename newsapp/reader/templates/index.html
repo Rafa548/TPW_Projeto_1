@@ -157,31 +157,19 @@
       </nav><!-- .navbar -->
 
       <div class="position-relative">
-        
-
         <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
         <i class="bi bi-list mobile-nav-toggle"></i>
-
-                <!-- search.html -->
         {% block content %}
-        
-        <!-- ======= Search Form ======= -->
-        <div class="search-form-wrap js-search-form-wrap">
-          <form action="{% url 'search_results' %}?q=q" method="get" class="search-form" id = "search-form">
-            <span class="icon bi-search"></span>
-            <input type="text" placeholder="Search" class="form-control" id = "search-input" name="q">
-            <button class="btn js-search-close"><span class="bi-x"></span></button>
-          </form>
-        </div><!-- End Search Form -->
-        
-        
-        
+            <!-- ======= Search Form ======= -->
+            <div class="search-form-wrap js-search-form-wrap">
+              <form action="{% url 'search_results' %}?q=q" method="get" class="search-form" id = "search-form">
+                <span class="icon bi-search"></span>
+                <input type="text" placeholder="Search" class="form-control" id = "search-input" name="q">
+                <button class="btn js-search-close"><span class="bi-x"></span></button>
+              </form>
+            </div><!-- End Search Form -->
         {% endblock %}
-              
-              
-
       </div>
-
     </div>
 
   </header><!-- End Header -->
@@ -191,37 +179,36 @@
     <!-- ======= Hero Slider Section ======= -->
     <section id="hero-slider" class="hero-slider">
       <div class="container" id="articles-container">
-    <div class="row">
-        <div class="col-12">
-            <!-- Hero Slider Section -->
-            <section id="hero-slider" class="hero-slider">
-                <div class="swiper sliderFeaturedPosts">
-                    <div class="swiper-wrapper">
-                        {% for value in data %}
-                            <div class="swiper-slide">
-                                <a href="{{ value.url }}" class="img-bg d-flex align-items-end" style="background-image: url('{{ value.image }}');">
-                                    <div class="img-bg-inner">
-                                        <h2>{{ value.title }}</h2>
-                                        <p>{{ value.description }}</p>
+            <div class="row">
+                <div class="col-12">
+                    <!-- Hero Slider Section -->
+                    <section id="hero-slider" class="hero-slider">
+                        <div class="swiper sliderFeaturedPosts">
+                            <div class="swiper-wrapper">
+                                {% for value in data %}
+                                    <div class="swiper-slide">
+                                        <a href="{{ value.url }}" class="img-bg d-flex align-items-end" style="background-image: url('{{ value.image }}');">
+                                            <div class="img-bg-inner">
+                                                <h2>{{ value.title }}</h2>
+                                                <p>{{ value.description }}</p>
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
-                    </div>
-                    <div class="custom-swiper-button-next">
-                        <span class="bi-chevron-right"></span>
-                    </div>
-                    <div class="custom-swiper-button-prev">
-                        <span class="bi-chevron-left"></span>
-                    </div>
-                    <div class="swiper-pagination"></div>
+                            <div class="custom-swiper-button-next">
+                                <span class="bi-chevron-right"></span>
+                            </div>
+                            <div class="custom-swiper-button-prev">
+                                <span class="bi-chevron-left"></span>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </section>
+                    <!-- End Hero Slider Section -->
                 </div>
-            </section>
-            <!-- End Hero Slider Section -->
+            </div>
         </div>
-    </div>
-</div>
-
     </section><!-- End Hero Slider Section -->
 
     <!-- ======= Post Grid Section ======= -->

@@ -36,18 +36,98 @@
   * Author: BootstrapMade.com
   * License: https:///bootstrapmade.com/license/
   ======================================================== -->
+    
+    <style>
+        #navbar {
+          background-color: #333; /* Change the background color to your preference */
+        }
+            #navbar ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        
+        #navbar ul li {
+          display: inline;
+          margin-right: 20px; /* Add spacing between menu items */
+        }
+        
+        #navbar ul li a {
+          text-decoration: none;
+          color: #fff; /* Change the text color to your preference */
+          font-size: 16px; /* Adjust the font size as needed */
+          transition: color 0.3s; /* Add a smooth color transition on hover */
+        }
+        
+        #navbar ul li a:hover {
+          color: #ff4500; /* Change the color on hover to your preference */
+        }
+        #navbar .btn {
+          background-color: #ff4500; /* Change the button background color to your preference */
+          color: #fff; /* Change the text color to your preference */
+          padding: 10px 20px; /* Adjust the padding as needed */
+          border: none;
+          border-radius: 5px; /* Add rounded corners */
+          text-decoration: none;
+          font-size: 16px; /* Adjust the font size as needed */
+        }
+        
+        #navbar .btn:hover {
+          background-color: #ff6600; /* Change the button background color on hover to your preference */
+        }
+        .js-search-open .bi-search {
+          font-size: 24px; /* Adjust the icon size as needed */
+          color: #fff; /* Change the icon color to your preference */
+          text-decoration: none;
+        }
+        
+        .js-search-open .bi-search:hover {
+          color: #ff4500; /* Change the icon color on hover to your preference */
+        }
+        
+        .dropdown-toggle.custom-dropdown-toggle {
+            color: #fff !important;
+            text-decoration: none !important;
+            font-size: 16px !important;
+            transition: color 0.3s !important;
+        }
+    
+        .dropdown-toggle.custom-dropdown-toggle:hover {
+            color: #ff4500 !important;
+        }
+    
+        .dropdown-menu.custom-dropdown-menu {
+            background-color: #333 !important;
+        }
+    
+        .dropdown-item.custom-dropdown-item {
+            color: #fff !important;
+            text-decoration: none !important;
+            padding: 8px 16px !important;
+            display: block !important;
+            transition: color 0.3s !important;
+            margin: 0;
+            padding-top: 5px; /* Adjust the top padding as needed */
+            padding-bottom: 5px;
+        }
+    
+        .dropdown-item.custom-dropdown-item:hover {
+            color: #ff4500 !important;
+        }
+
+    </style>
 </head>
 
 <body>
 
   <!-- ======= Header ======= -->
-  <header id="header" class="header d-flex align-items-center fixed-top">
+  <header id="header" class="header d-flex align-items-center fixed-top" style="background-color: #333;">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <a href="{% url 'index' %}" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="static/img/logo.png" alt=""> -->
-        <h1>ByteNewz</h1>
+        <h1 style="color: white;">ByteNewz</h1>
       </a>
 
       <nav id="navbar" class="navbar" style="margin-right: 100px">
@@ -58,6 +138,22 @@
           <li><a href="{% url 'category' %}?q=Sports">Sports</a></li>
           <li><a href="{% url 'category' %}?q=Science">Science</a></li>
           <li><a href="{% url 'category' %}?q=Health">Health</a></li>
+          {% if user.is_authenticated %}
+                <li class="nav-item dropdown custom-dropdown">
+                    <a class="nav-link dropdown-toggle custom-dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ user.full_name }}
+                    </a>
+                    <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item custom-dropdown-item" href={% url 'accounts:edit_profile' request.user.id %}>Profile</a></li>
+                        <li><a class="dropdown-item custom-dropdown-item" href="#">Bookmarks</a></li>
+                        <li><a class="dropdown-item custom-dropdown-item" href="{% url 'accounts:user_logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+          {% else %}
+             <li><a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a></li>
+             <li><a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Sign-up</a></li>
+          {% endif %}
+            <!-- <li><a href="{% url 'accounts:select_interests' %}">Escolher Interesses</a></li> -->
         </ul>
       </nav><!-- .navbar -->
 
@@ -111,15 +207,16 @@
                               <h3 class="m-0 p-0">{{ data.author }}</h3>
                           </div>
                       </div>
-                      <form method="post" action="{% url 'save_news' %}">
-                          {% csrf_token %}
-                          <input type="hidden" name="news_url" value="{{ data.url }}">
-                          <input type="hidden" name="news_title" value="{{ data.title }}">
-                          <input type="hidden" name="news_description" value="{{ data.description }}">
-                          <input type="hidden" name="news_image" value="{{ data.image }}">
-                          <input type="hidden" name="news_publishedat" value="{{ data.publishedat }}">
-                          <button class="btn btn-primary save-button" >Save</button>
+                      <form id="news-form" method="Post">
+                        {% csrf_token %}
+                        <input type="hidden" name="news_url" value="{{ data.url }}">
+                        <input type="hidden" name="news_title" value="{{ data.title }}">
+                        <input type="hidden" name="news_description" value="{{ data.description }}">
+                        <input type="hidden" name="news_image" value="{{ data.image }}">
+                        <input type="hidden" name="news_publishedat" value="{{ data.publishedat }}">
+                        <button type="button" class="btn btn-primary save-button">Save</button>
                       </form>
+
                   </div>
               </div>
               {% endfor %}
@@ -252,6 +349,7 @@
   <script src="static/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="static/vendor/aos/aos.js"></script>
   <script src="static/vendor/php-email-form/validate.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="static/js/main.js"></script>
@@ -268,7 +366,36 @@
             searchForm.submit();
         }
     });
-</script>
+    
+    
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".save-button").click(function () {
+                
+                var form = $(this).closest("form");
+                
+                // Serialize the form data
+                var formData = form.serialize();
+        
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'save_news' %}",
+                    data: formData,
+                    success: function (response) {
+                        
+                        console.log("Data saved successfully");
+                        //console.log(formData);
+                    },
+                    error: function (error) {
+                        
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 
