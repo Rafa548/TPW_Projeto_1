@@ -2,7 +2,7 @@ from django import forms
 
 from . import models
 
-from .models import User
+from .models import User, Interest
 
 
 class UserLoginForm(forms.Form):
@@ -53,3 +53,20 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['full_name', 'email']
+
+
+class InterestsForm(forms.ModelForm):
+    user_email = forms.EmailField(label='Your Email')
+
+    class Meta:
+        model = Interest
+        fields = ['name']
+
+    name = forms.ModelMultipleChoiceField(
+        queryset=Interest.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(InterestsForm, self).__init__(*args, **kwargs)
+        self.fields['name'].queryset = Interest.objects.all()

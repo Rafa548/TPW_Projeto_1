@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
-from .forms import UserRegistrationForm, UserLoginForm, ManagerLoginForm, EditProfileForm
+from .forms import UserRegistrationForm, UserLoginForm, ManagerLoginForm, EditProfileForm, InterestsForm
 from accounts.models import User
 
 
@@ -67,7 +68,7 @@ def user_login(request):
             )
             if user is not None:
                 login(request, user)
-                return redirect('reader:home')
+                return redirect('reader:index')
             else:
                 messages.error(
                     request, 'username or password is wrong', 'danger'
@@ -96,3 +97,33 @@ def edit_profile(request, userid):
         form = EditProfileForm(instance=user)
     context = {'title':'Edit Profile', 'form':form}
     return render(request, 'edit_profile.html', context)
+
+
+def select_interests(request):
+    user = None  # Initialize the user as None
+
+    if request.method == 'POST':
+        form = InterestsForm(request.POST)
+        if form.is_valid():
+            # Check if a user with the provided email exists
+            email = form.cleaned_data['user_email']  # Replace 'user_email' with the actual field name
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                # Handle the case where the user does not exist
+                pass
+
+            if user:
+                selected_interests = form.cleaned_data['name']
+                user.interests.set(selected_interests)
+                return redirect('accounts:profile')  # Redirect to the user's profile or another appropriate page
+    else:
+        form = InterestsForm()
+
+    return render(request, 'interests_form.html', {'form': form, 'user': user})
+
+def profile(request):
+    # Assuming the user is authenticated, you can access their interests and name
+    user = request.user
+
+    return render(request, 'profile.html', {'user': user})

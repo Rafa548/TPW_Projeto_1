@@ -12,6 +12,8 @@ urlpatterns = [
     path('login/manager/', views.manager_login, name='manager_login'),
     path('logout/', views.user_logout, name='user_logout'),
     path('profile/<int:userid>', views.edit_profile, name='edit_profile'),
+    path('interests/', views.select_interests, name='select_interests'),
+    path('profile/', views.profile, name='profile'),
     path(
         'password-reset/',
         auth_views.PasswordResetView.as_view(

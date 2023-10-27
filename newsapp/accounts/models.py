@@ -5,9 +5,16 @@ from .managers import UserManager
 from reader.models import News
 
 
+class Interest(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class User(AbstractBaseUser):
     email = models.EmailField(max_length=100, unique=True)
-    full_name = models.CharField(max_length=100)    
+    full_name = models.CharField(max_length=100)
+    interests = models.ManyToManyField(Interest, blank=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     likes = models.ManyToManyField(News, blank=True, related_name='likes')
@@ -35,3 +42,12 @@ class User(AbstractBaseUser):
 
     def get_likes_count(self):
         return self.likes.count()
+
+    def get_interests(self):
+        return list(self.interests.all())
+
+    def add_interest(self, news_item):
+        self.interests.add(news_item)
+
+    def remove_interest(self, news_item):
+        self.interests.remove(news_item)
