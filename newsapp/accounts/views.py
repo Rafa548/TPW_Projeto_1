@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .forms import UserRegistrationForm, UserLoginForm, ManagerLoginForm, EditProfileForm, InterestsForm
-from accounts.models import User
+from accounts.models import User, Interest
 
 
 def create_manager():
@@ -76,7 +76,7 @@ def user_login(request):
                 return redirect('accounts:user_login')
     else:
         form = UserLoginForm()
-    context = {'title':'Login', 'form': form}
+    context = {'title':'Login', 'form': form , 'interests': Interest.objects.all()}
     return render(request, 'login.html', context)
 
 

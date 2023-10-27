@@ -143,7 +143,7 @@
                         {{ user.full_name }}
                     </a>
                     <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item custom-dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item custom-dropdown-item" href={% url 'accounts:edit_profile' request.user.id %}>Profile</a></li>
                         <li><a class="dropdown-item custom-dropdown-item" href="#">Bookmarks</a></li>
                         <li><a class="dropdown-item custom-dropdown-item" href="{% url 'accounts:user_logout' %}">Logout</a></li>
                     </ul>
