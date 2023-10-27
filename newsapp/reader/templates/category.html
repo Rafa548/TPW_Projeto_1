@@ -213,7 +213,15 @@
                         <input type="hidden" name="news_description" value="{{ data.description }}">
                         <input type="hidden" name="news_image" value="{{ data.image }}">
                         <input type="hidden" name="news_publishedat" value="{{ data.publishedat }}">
-                        <button type="button" class="btn btn-primary save-button">Save</button>
+                        {% if user.is_authenticated %}
+                        
+                        {% if data.url not in saved_news_url %}
+                            <button type="button" class="btn btn-primary save-button" data-news-url="{{ data.url }}">Save</button>
+                        {% else %}
+                            <button type="button" class="btn btn-warning remove-button" data-news-url="{{ data.url }}">Remove</button>
+                        {% endif %}
+                  
+                        {% endif %}
                       </form>
 
                   </div>
@@ -369,32 +377,65 @@
     
     </script>
 
-    <script>
-        $(document).ready(function () {
-            $(".save-button").click(function () {
-                
-                var form = $(this).closest("form");
-                
-                // Serialize the form data
-                var formData = form.serialize();
-        
-                $.ajax({
-                    type: "POST",
-                    url: "{% url 'save_news' %}",
-                    data: formData,
-                    success: function (response) {
-                        
-                        console.log("Data saved successfully");
-                        //console.log(formData);
-                    },
-                    error: function (error) {
-                        
-                        console.error("Error:", error);
-                    }
-                });
-            });
-        });
-    </script>
+<script>
+  $(document).ready(function () {
+      // Function to handle the "Save" button click
+      function handleSaveButtonClick() {
+          var button = $(this);
+          var newsUrl = button.data("news-url");
+          var form = button.closest("form");
+
+          $.ajax({
+              type: "POST",
+              url: "{% url 'save_news' %}",
+              data: form.serialize(),
+              success: function (response) {
+                  if (response.success) {
+                      // Change button text and class
+                      button.text("Remove");
+                      button.removeClass("btn-primary").addClass("btn-warning");
+                      button.removeClass("save-button").addClass("remove-button");
+                      // Update the click event to handle removal
+                      button.off("click").on("click", handleRemoveButtonClick);
+                  }
+              },
+              error: function (error) {
+                  console.error("Error:", error);
+              }
+          });
+      }
+
+      // Function to handle the "Remove" button click
+      function handleRemoveButtonClick() {
+          var button = $(this);
+          var newsUrl = button.data("news-url");
+          var form = button.closest("form");
+
+          $.ajax({
+              type: "POST",
+              url: "{% url 'delete_news' %}",
+              data: form.serialize(),
+              success: function (response) {
+                  if (response.success) {
+                      // Change button text and class
+                      button.text("Save");
+                      button.removeClass("btn-warning").addClass("btn-primary");
+                      button.removeClass("remove-button").addClass("save-button");
+                      // Update the click event to handle saving
+                      button.off("click").on("click", handleSaveButtonClick);
+                  }
+              },
+              error: function (error) {
+                  console.error("Error:", error);
+              }
+          });
+      }
+
+      // Attach the initial click event handlers
+      $(".save-button").on("click", handleSaveButtonClick);
+      $(".remove-button").on("click", handleRemoveButtonClick);
+  });
+</script>
 
 </body>
 

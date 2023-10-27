@@ -221,15 +221,21 @@ def category(request):
         data_popular = data_popular["articles"]
 
 
+        saved_news = request.user.user_saved_news.all()
+        saved_news_url = []
+        for i in saved_news:
+            saved_news_url.append(i.url)
+
         context = {
-            "success": True,
-            "data": [],
-            "Popular_Data": [],
-            "Trending_Data": [],
-            "Latest_Data": [],
-            "search": query,
-            "current_page": int(npage),
-            "page_range": range(1,6)
+        "success": True,
+        "data": [],
+        "Popular_Data": [],
+        "Trending_Data": [],
+        "Latest_Data": [],
+        "search": query,
+        "current_page": int(npage),
+        "page_range": range(1,6),
+        "saved_news_url": saved_news_url
         }
 
         for i in data:
@@ -353,18 +359,40 @@ def save_news(request):
         news_image = form.cleaned_data['news_image']
         news_publishedat = form.cleaned_data['news_publishedat']
 
+        #check if the news already exists of this user
+        news = request.user.user_saved_news.filter(url=news_url)
+        if news.exists():
+            
+            return JsonResponse({"exists": True})
+
         saved_news = News(
-            url=news_url,
-            title = news_title,
-            description = news_description,
-            image = news_image,
-            created_at = news_publishedat)
+        
+        url=news_url,
+        title = news_title,
+        description = news_description,
+        image = news_image,
+        created_at = news_publishedat,)
 
         saved_news.save()
         request.user.user_saved_news.add(saved_news)
 
         return JsonResponse({"success": True})
 
+    return JsonResponse({"success": False})
+
+@login_required
+def delete_news(request):
+    if request.method == 'POST':
+        news_url = request.POST.get('news_url', None)
+        print(news_url)
+        if news_url is None:
+            return JsonResponse({"success": False})
+        news = request.user.user_saved_news.filter(url=news_url)
+        if news.exists():
+            news.delete()
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({"success": False})
     return JsonResponse({"success": False})
 
 

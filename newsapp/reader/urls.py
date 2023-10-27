@@ -13,5 +13,6 @@ urlpatterns = [
     path('index', views.home, name='index'),
     path('category', views.category, name='category'),
     path('save_news', views.save_news, name='save_news'),
+    path('delete_news', views.delete_news, name='delete_news'),
 
 ]
