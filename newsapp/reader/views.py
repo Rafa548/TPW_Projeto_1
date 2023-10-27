@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 import requests
+from django.contrib.auth.decorators import login_required
+
 
 from reader.models import News
 from .forms import NewsSaveForm, SearchForm
@@ -350,6 +352,7 @@ def loadcontent(request):
     except Exception as e:
         return JsonResponse({"success":False})
     
+@login_required
 def save_news(request):
     form = NewsSaveForm(request.POST)
     print(form.is_valid())
@@ -362,13 +365,16 @@ def save_news(request):
         news_image = form.cleaned_data['news_image']
         news_publishedat = form.cleaned_data['news_publishedat']
 
-        saved_news = News(url=news_url,
+        saved_news = News(
+        
+        url=news_url,
         title = news_title,
         description = news_description,
         image = news_image,
         created_at = news_publishedat,)
 
         saved_news.save()
+        request.user.user_saved_news.add(saved_news)
 
         return JsonResponse({"success": True})
 

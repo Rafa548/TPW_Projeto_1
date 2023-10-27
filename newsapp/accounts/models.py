@@ -17,7 +17,7 @@ class User(AbstractBaseUser):
     interests = models.ManyToManyField(Interest, blank=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    likes = models.ManyToManyField(News, blank=True, related_name='likes')
+    user_saved_news = models.ManyToManyField(News, blank=True, related_name='likes')
     # set a manager role for shop manager to access orders and products
     is_manager = models.BooleanField(default=False)
 
@@ -51,3 +51,9 @@ class User(AbstractBaseUser):
 
     def remove_interest(self, news_item):
         self.interests.remove(news_item)
+
+    def get_saved_news(self):
+        return list(self.user_saved_news.all())
+    
+    def add_saved_news(self, news_item):
+        self.user_saved_news.add(news_item)
