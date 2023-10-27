@@ -14,6 +14,4 @@ urlpatterns = [
     path('category', views.category, name='category'),
     path('save_news', views.save_news, name='save_news'),
 
-
-
 ]

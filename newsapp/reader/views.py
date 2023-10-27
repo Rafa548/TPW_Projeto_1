@@ -4,7 +4,7 @@ from django.conf import settings
 import requests
 from django.contrib.auth.decorators import login_required
 
-
+from accounts.models import Interest
 from reader.models import News
 from .forms import NewsSaveForm, SearchForm
 
@@ -65,7 +65,8 @@ def home(request):
         "data": [],
         "Sport_Data": [],
         "Culture_Data": [],
-        "search": search
+        "search": search,
+        "interests": Interest.objects.all()
     }
 
 
@@ -219,30 +220,17 @@ def category(request):
             return HttpResponse("<h1>Request Failed</h1>")
         data_popular = data_popular["articles"]
 
-        # Process the query and obtain search results
-        # You can use Django's ORM or any other method to retrieve search results
-
-        # For example, if you have a model named 'Article' and want to search in its title field:
-        # search_results = Article.objects.filter(title__icontains=query)
-
-        #context = {
-        #    'query': query,
-            # 'search_results': search_results,  # Uncomment this line if you have search results to display
-        #}
 
         context = {
-        "success": True,
-        "data": [],
-        "Popular_Data": [],
-        "Trending_Data": [],
-        "Latest_Data": [],
-        "search": query,
-        "current_page": int(npage),
-        "page_range": range(1,6)
+            "success": True,
+            "data": [],
+            "Popular_Data": [],
+            "Trending_Data": [],
+            "Latest_Data": [],
+            "search": query,
+            "current_page": int(npage),
+            "page_range": range(1,6)
         }
-
-        print("page_range:",context["page_range"])
-        print("current_page:",context["current_page"])
 
         for i in data:
             if i["title"] == "[Removed]":
@@ -366,12 +354,11 @@ def save_news(request):
         news_publishedat = form.cleaned_data['news_publishedat']
 
         saved_news = News(
-        
-        url=news_url,
-        title = news_title,
-        description = news_description,
-        image = news_image,
-        created_at = news_publishedat,)
+            url=news_url,
+            title = news_title,
+            description = news_description,
+            image = news_image,
+            created_at = news_publishedat)
 
         saved_news.save()
         request.user.user_saved_news.add(saved_news)
@@ -379,5 +366,7 @@ def save_news(request):
         return JsonResponse({"success": True})
 
     return JsonResponse({"success": False})
+
+
 
 

@@ -140,8 +140,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'newsapp/static')]
 
 #APIKEY = "fde47eb1fd3c4768964eb3d3bd9eaae2"
 
-APIKEY = "7dfa405963a9460693136651c8006b36"
+#APIKEY = "7dfa405963a9460693136651c8006b36"
 
+APIKEY ="dbb12ae7153a417b85f1b3ea8f8bfe6e"
 
 LOGIN_URL = 'accounts:user_login'
 

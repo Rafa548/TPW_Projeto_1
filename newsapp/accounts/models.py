@@ -40,9 +40,6 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
-    def get_likes_count(self):
-        return self.likes.count()
-
     def get_interests(self):
         return list(self.interests.all())
 

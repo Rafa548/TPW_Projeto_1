@@ -113,6 +113,11 @@
         .dropdown-item.custom-dropdown-item:hover {
             color: #ff4500 !important;
         }
+        
+        .modal-backdrop {
+            background-color: transparent !important;
+            pointer-events: none !important;
+        }
 
     </style>
 </head>
@@ -152,9 +157,36 @@
              <li><a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a></li>
              <li><a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Sign-up</a></li>
           {% endif %}
-            <!-- <li><a href="{% url 'accounts:select_interests' %}">Escolher Interesses</a></li> -->
+           
         </ul>
       </nav><!-- .navbar -->
+
+        <div class="modal fade" id="interestModal" tabindex="-1" aria-labelledby="interestModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="interestModalLabel">Choose Your Interests</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="interestForm" method="post" action="{% url 'accounts:save_interests' %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {% for interest in interests %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="interest{{ forloop.counter }}" name="interests" value="{{ interest.name }}">
+                                    <label class="form-check-label" for="interest{{ forloop.counter }}">{{ interest.name }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveInterestsButton" data-bs-dismiss="modal">Save Interests</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+  </div>
 
       <div class="position-relative">
         <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
@@ -636,6 +668,10 @@
 
         </div> <!-- End .row -->
       </div>
+        <button type="button" id="modal_btn" class="btn btn-primary" style="display: none;"  data-bs-toggle="modal" data-bs-target="#interestModal">
+            Choose Interests
+          </button>
+
     </section><!-- End Lifestyle Category Section -->
 
   </main><!-- End #main -->
@@ -726,8 +762,47 @@
                 }
             }
         }
+        
+        $(document).ready(function () {
+            $('#interestModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        });
+        
+        $(document).ready(function () {
+        $('#saveInterestsButton').click(function () {
+            var formData = $('#interestForm').serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '{%  url "accounts:save_interests" %}',
+                data: formData,
+                success: function (data) {
+                    // Handle the response here, e.g., update the modal content or close the modal
+                    if (data.success) {
+                        // Interests saved successfully
+                        // You can update modal content or display a success message
+                        // For example, you can hide the modal
+                        $('#interestModal').modal('hide');
+                    } else {
+                        // Handle errors if needed
+                    }
+                }
+                });
+            });
+        });
 
     </script>
+
+    {% if user.is_authenticated and not user.get_interests %}
+      <script>
+        $(document).ready(function () {
+          $('#modal_btn').click();  // Simulate a click on the hidden button to open the modal
+        });
+      </script>
+    {% endif %}
+
 
 </body>
 

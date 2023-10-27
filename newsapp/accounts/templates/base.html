@@ -14,12 +14,6 @@
       flex: 1;
     }
     
-    .modal-backdrop {
-    background-color: transparent !important;
-    pointer-events: none !important;
-    }
-
-    
     </style>
     
   <meta charset="utf-8">
@@ -172,7 +166,6 @@
              <li><a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a></li>
              <li><a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Sign-up</a></li>
           {% endif %}
-            <!-- <li><a href="{% url 'accounts:select_interests' %}">Escolher Interesses</a></li> -->
         </ul>
       </nav><!-- .navbar -->
 
@@ -201,25 +194,24 @@
                     <h5 class="modal-title" id="interestModalLabel">Choose Your Interests</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                    <div class="modal-body">
-                        {% for interest in interests %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="interest{{ forloop.counter }}" name="interests[]" value="{{ interest.name }}">
-                                <label class="form-check-label" for="interest{{ forloop.counter }}">{{ interest.name }}</label>
-                            </div>
-                        {% endfor %}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save Interests</button>
-                                </div>
-                            </div>
+                <div class="modal-body">
+                    {% for interest in interests %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="interest{{ forloop.counter }}" name="interests[]" value="{{ interest.name }}">
+                            <label class="form-check-label" for="interest{{ forloop.counter }}">{{ interest.name }}</label>
                         </div>
-                </div>
+                    {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save Interests</button>
+                    </div>
+            </div>
+        </div>
+  </div>
 
   <main id="main" class="container">
       <div class="row mt-3">
-          <!-- messages -->
           
           <!-- content -->
           {% block content %}{% endblock %}
@@ -293,13 +285,6 @@
                 // If the "Enter" key is pressed, submit the form
                 searchForm.submit();
             }
-        });
-        
-        $(document).ready(function () {
-            $('#interestModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
         });
         
     </script>

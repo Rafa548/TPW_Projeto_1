@@ -8,10 +8,6 @@ from accounts.models import User, Interest
 
 
 def create_manager():
-    """
-    to execute once on startup:
-    this function will call in online_shop/urls.py
-    """
     if not User.objects.filter(email="manager@example.com").first():
         user = User.objects.create_user(
             "manager@example.com", 'shop manager' ,'managerpass1234'
@@ -99,31 +95,11 @@ def edit_profile(request, userid):
     return render(request, 'edit_profile.html', context)
 
 
-def select_interests(request):
-    user = None  # Initialize the user as None
 
+@login_required
+def save_interests(request):
     if request.method == 'POST':
-        form = InterestsForm(request.POST)
-        if form.is_valid():
-            # Check if a user with the provided email exists
-            email = form.cleaned_data['user_email']  # Replace 'user_email' with the actual field name
-            try:
-                user = User.objects.get(email=email)
-            except User.DoesNotExist:
-                # Handle the case where the user does not exist
-                pass
-
-            if user:
-                selected_interests = form.cleaned_data['name']
-                user.interests.set(selected_interests)
-                return redirect('accounts:profile')  # Redirect to the user's profile or another appropriate page
-    else:
-        form = InterestsForm()
-
-    return render(request, 'interests_form.html', {'form': form, 'user': user})
-
-def profile(request):
-    # Assuming the user is authenticated, you can access their interests and name
-    user = request.user
-
-    return render(request, 'profile.html', {'user': user})
+        selected_interests = request.POST.getlist('interests')
+        request.user.interests.set(Interest.objects.filter(name__in=selected_interests))
+        return redirect('home')
+    return redirect('home')
