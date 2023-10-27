@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 import requests
-from .forms import SearchForm
+
+from reader.models import News
+from .forms import NewsSaveForm, SearchForm
 
 
 temp_img = "https://images.pexels.com/photos/3225524/pexels-photo-3225524.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
@@ -347,5 +349,29 @@ def loadcontent(request):
         return JsonResponse(context)
     except Exception as e:
         return JsonResponse({"success":False})
+    
+def save_news(request):
+    form = NewsSaveForm(request.POST)
+    print(form.is_valid())
+    print(form.errors)
+
+    if form.is_valid():
+        news_url = form.cleaned_data['news_url']
+        news_title = form.cleaned_data['news_title']
+        news_description = form.cleaned_data['news_description']
+        news_image = form.cleaned_data['news_image']
+        news_publishedat = form.cleaned_data['news_publishedat']
+
+        saved_news = News(url=news_url,
+        title = news_title,
+        description = news_description,
+        image = news_image,
+        created_at = news_publishedat,)
+
+        saved_news.save()
+
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
 
 

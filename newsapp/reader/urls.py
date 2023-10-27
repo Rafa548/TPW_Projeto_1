@@ -12,7 +12,8 @@ urlpatterns = [
     path('search_result', views.search_results, name='search_results'),
     path('index', views.home, name='index'),
     path('category', views.category, name='category'),
-    
+    path('save_news', views.save_news, name='save_news'),
+
 
 
 ]

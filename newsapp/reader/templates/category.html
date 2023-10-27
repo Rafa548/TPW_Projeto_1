@@ -97,24 +97,33 @@
             <h3 class="category-title">Category: {{ search }}</h3>
 
             {% if data %}
-            {% for data in data %}
-            <div class="d-md-flex post-entry-2 half">
-              <a href="{{ data.url }}" class="me-4 thumbnail">
-                <img src="{{ data.image }}" alt="" class="img-fluid">
-              </a>
-              <div>
-                <div class="post-meta"><span>{{ data.publishedat }}</span></div>
-                <h3><a href="{{ data.url }}">{{data.title}}</a></h3>
-                <p>{{data.description}}</p>
-                <div class="d-flex align-items-center author">
-                  <div class="name">
-                    <h3 class="m-0 p-0">{{ data.author }}</h3>
+              {% for data in data %}
+              <div class="d-md-flex post-entry-2 half">
+                  <a href="{{ data.url }}" class="me-4 thumbnail">
+                      <img src="{{ data.image }}" alt="" class="img-fluid">
+                  </a>
+                  <div>
+                      <div class="post-meta"><span>{{ data.publishedat }}</span></div>
+                      <h3><a href="{{ data.url }}">{{data.title}}</a></h3>
+                      <p>{{data.description}}</p>
+                      <div class="d-flex align-items-center author">
+                          <div class="name">
+                              <h3 class="m-0 p-0">{{ data.author }}</h3>
+                          </div>
+                      </div>
+                      <form method="post" action="{% url 'save_news' %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="news_url" value="{{ data.url }}">
+                          <input type="hidden" name="news_title" value="{{ data.title }}">
+                          <input type="hidden" name="news_description" value="{{ data.description }}">
+                          <input type="hidden" name="news_image" value="{{ data.image }}">
+                          <input type="hidden" name="news_publishedat" value="{{ data.publishedat }}">
+                          <button class="btn btn-primary save-button" >Save</button>
+                      </form>
                   </div>
-                </div>
               </div>
-            </div>
-            {% endfor %}
-            {% endif %}
+              {% endfor %}
+          {% endif %}
 
 
             <div class="text-start py-4">
