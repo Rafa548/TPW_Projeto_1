@@ -395,6 +395,14 @@ def delete_news(request):
             return JsonResponse({"success": False})
     return JsonResponse({"success": False})
 
+def bookmarks(request):
+    user = request.user
+    saved_news = user.user_saved_news.all()
 
+    context = {
+        'saved_news': saved_news
+    }
+
+    return render(request, 'bookmarks.html', context)
 
 
