@@ -48,7 +48,7 @@ def home(request):
             "description":  "" if i["description"] is None else i["description"],
             "url": i["url"],
             "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
-            "publishedat": i["publishedAt"]
+            "publishedat": i["publishedAt"].split("T")[0]
         })
 
     for interest in default_interests:
@@ -76,7 +76,7 @@ def home(request):
                 "description": "" if i["description"] is None else i["description"],
                 "url": i["url"],
                 "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
-                "publishedat": i["publishedAt"]
+                "publishedat": i["publishedAt"].split("T")[0]
             })
         if search == "Sport":
             print("context:", "data_"+search)
@@ -111,7 +111,7 @@ def home(request):
                     "description": "" if i["description"] is None else i["description"],
                     "url": i["url"],
                     "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
-                    "publishedat": i["publishedAt"]
+                    "publishedat": i["publishedAt"].split("T")[0]
                 })
             x+=1
 
