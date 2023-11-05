@@ -1,0 +1,2 @@
+para executar o comando para mudar de api usar
+python manage.py change_api_key

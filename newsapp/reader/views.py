@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect , get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
+from newsapp.api_key import API_KEY
 import requests
 from django.contrib.auth.decorators import login_required
+import subprocess
 
 from accounts.models import Interest
 from reader.models import News
@@ -17,7 +19,7 @@ def home(request):
     page = request.GET.get('page', 1)
     search = request.GET.get('search', None)
     url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
-            "us",1,settings.APIKEY
+            "us",1,API_KEY
         )
     print("url:", url)
     r = requests.get(url=url)
@@ -54,7 +56,7 @@ def home(request):
     for interest in default_interests:
         search = interest
         url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-            search, "popularity", page, settings.APIKEY
+            search, "popularity", page, API_KEY
         )
         print("url:", url)
         r = requests.get(url=url)
@@ -89,7 +91,7 @@ def home(request):
             context["user_interests"].append(interest.name)
             search = interest.name
             url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-                search, "popularity", page, settings.APIKEY
+                search, "popularity", page, API_KEY
             )
             print("url:", url)
             r = requests.get(url=url)
@@ -114,7 +116,9 @@ def home(request):
                     "publishedat": i["publishedAt"].split("T")[0]
                 })
             x+=1
-
+    current_api_key = API_KEY
+    subprocess.call(["python", "manage.py", "rotate_api_key"])
+    current_api_key = API_KEY
     # send the news feed to template in context
     return render(request, 'index.html', context=context)
 
@@ -125,7 +129,7 @@ def search_results(request):
         npage = request.GET.get('page', 1)
 
         url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-            query, "popularity", npage, settings.APIKEY
+            query, "popularity", npage, settings.API_KEY
         )
 
         r = requests.get(url=url)
