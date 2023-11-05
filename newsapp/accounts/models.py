@@ -7,7 +7,6 @@ from reader.models import News
 
 class Interest(models.Model):
     name = models.CharField(max_length=100, unique=True)
-
     def __str__(self):
         return self.name
 
@@ -18,6 +17,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user_saved_news = models.ManyToManyField(News, blank=True, related_name='likes')
+    user_news_historic = models.ManyToManyField(News, blank=True, related_name='historic')
     # set a manager role for shop manager to access orders and products
     is_manager = models.BooleanField(default=False)
 
@@ -25,7 +25,6 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name']
-
 
     def __str__(self):
         return self.email
@@ -54,3 +53,7 @@ class User(AbstractBaseUser):
     
     def add_saved_news(self, news_item):
         self.user_saved_news.add(news_item)
+    
+    def add_to_historic(self, news_item):
+        self.user_news_historic.add(news_item)
+        

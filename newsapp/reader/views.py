@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 import requests
@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from accounts.models import Interest
 from reader.models import News
+from accounts.models import User
 from .forms import NewsSaveForm, SearchForm
 
 
@@ -15,60 +16,25 @@ temp_img = "https://images.pexels.com/photos/3225524/pexels-photo-3225524.jpeg?a
 def home(request):
     page = request.GET.get('page', 1)
     search = request.GET.get('search', None)
-
-    if search is None or search=="top":
-        # get the top news
-        url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
+    url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
             "us",1,settings.APIKEY
-        )
-    else:
-        # get the search query request
-        url = "https://newsapi.org/v2/everything?q={}&country={}&sortBy={}&page={}&apiKey={}".format(
-            search,"pt","popularity",page,settings.APIKEY
         )
     print("url:", url)
     r = requests.get(url=url)
 
-    search_sp = "Sport"
-    url_sp = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-        search_sp, "popularity", page, settings.APIKEY
-    )
-    print("url:", url_sp)
-    r_sp = requests.get(url=url_sp)
+    default_interests = ["Technology", "Science", "Health", "Entertainment", "Sport", "Culture"]
 
-    search_cul = "Culture"
-    url_cul = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-        search_cul, "popularity", page, settings.APIKEY
-    )
-    print("url:", url_cul)
-    r_cul = requests.get(url=url_cul)
-
-
-
+    context = {
+            "success": True,
+            "data": [],
+            "interests": Interest.objects.all(),
+            "user_interests": [],
+        }
+    
     data = r.json()
     if data["status"] != "ok":
         return HttpResponse("<h1>Request Failed</h1>")
     data = data["articles"]
-
-    data_sp = r_sp.json()
-    if data_sp["status"] != "ok":
-        return JsonResponse({"success": False})
-    data_sp = data_sp["articles"]
-
-    data_cul = r_cul.json()
-    if data_cul["status"] != "ok":
-        return JsonResponse({"success": False})
-    data_cul = data_cul["articles"]
-
-    context = {
-        "success": True,
-        "data": [],
-        "Sport_Data": [],
-        "Culture_Data": [],
-        "search": search,
-        "interests": Interest.objects.all()
-    }
-
 
     # separating the necessary data
     for i in data:
@@ -85,29 +51,69 @@ def home(request):
             "publishedat": i["publishedAt"]
         })
 
-    for i_sp in data_sp:
-        if i_sp["title"] == "[Removed]":
-                continue
-        context["Sport_Data"].append({
-            "title": i_sp["title"],
-            "author": i_sp["author"],
-            "description": "" if i_sp["description"] is None else i_sp["description"],
-            "url": i_sp["url"],
-            "image": temp_img if i_sp["urlToImage"] is None else i_sp["urlToImage"],
-            "publishedat": i_sp["publishedAt"].split("T")[0]
-        })
+    for interest in default_interests:
+        search = interest
+        url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+            search, "popularity", page, settings.APIKEY
+        )
+        print("url:", url)
+        r = requests.get(url=url)
+        data = r.json()
+        if data["status"] != "ok":
+            return HttpResponse("<h1>Request Failed</h1>")
+        data = data["articles"]
 
-    for i_cul in data_cul:
-        if i_cul["title"] == "[Removed]":
+        context["data_"+search] = []
+
+        for i in data:
+            if i["title"] == "[Removed]":
                 continue
-        context["Culture_Data"].append({
-            "title": i_cul["title"],
-            "author": i_cul["author"],
-            "description": "" if i_cul["description"] is None else i_cul["description"],
-            "url": i_cul["url"],
-            "image": temp_img if i_cul["urlToImage"] is None else i_cul["urlToImage"],
-            "publishedat": i_cul["publishedAt"].split("T")[0]
-        })
+            if i["author"] is None:
+                i["author"] = "Anonymous"
+            context["data_"+search].append({
+                "title": i["title"],
+                "author": i["author"],
+                "description": "" if i["description"] is None else i["description"],
+                "url": i["url"],
+                "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                "publishedat": i["publishedAt"]
+            })
+        if search == "Sport":
+            print("context:", "data_"+search)
+
+    if request.user.is_authenticated:
+        user = request.user
+        interests = user.interests.all()
+        x=0
+        for interest in interests:
+            context["user_interests"].append(interest.name)
+            search = interest.name
+            url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+                search, "popularity", page, settings.APIKEY
+            )
+            print("url:", url)
+            r = requests.get(url=url)
+            data = r.json()
+            if data["status"] != "ok":
+                return HttpResponse("<h1>Request Failed</h1>")
+            data = data["articles"]
+
+            context["data_"+str(x)] = []
+            
+            for i in data:
+                if i["title"] == "[Removed]":
+                    continue
+                if i["author"] is None:
+                    i["author"] = "Anonymous"
+                context["data_"+str(x)].append({
+                    "title": i["title"],
+                    "author": i["author"],
+                    "description": "" if i["description"] is None else i["description"],
+                    "url": i["url"],
+                    "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                    "publishedat": i["publishedAt"]
+                })
+            x+=1
 
     # send the news feed to template in context
     return render(request, 'index.html', context=context)
@@ -406,3 +412,21 @@ def bookmarks(request):
     return render(request, 'bookmarks.html', context)
 
 
+
+def add_to_historic(request):
+    news_url = request.GET.get('url')
+    news_title = request.GET.get('title')
+    news_description = request.GET.get('description')
+    news_image = request.GET.get('image')
+    news_publishedat = request.GET.get('publishedat')
+
+    if news_url:
+        if request.user.is_authenticated:
+            print(request.user)
+            new = News.objects.create(url=news_url, title=news_title, description=news_description, image=news_image, created_at=news_publishedat)
+            new.save()
+            user = User.objects.get(email=request.user)
+            user.user_news_historic.add(new)
+
+    # Redirect to the original news URL
+    return redirect(news_url)

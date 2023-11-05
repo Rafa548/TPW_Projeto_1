@@ -15,5 +15,5 @@ urlpatterns = [
     path('save_news', views.save_news, name='save_news'),
     path('delete_news', views.delete_news, name='delete_news'),
     path('bookmarks', views.bookmarks, name='bookmarks'),
-
+    path('add_to_historic',views.add_to_historic, name='add_to_historic'),
 ]

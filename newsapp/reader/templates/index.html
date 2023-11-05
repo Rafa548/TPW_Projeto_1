@@ -124,7 +124,6 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
   <header id="header" class="header d-flex align-items-center fixed-top" style="background-color: #333;">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
@@ -157,41 +156,13 @@
              <li><a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary me-2">Login</a></li>
              <li><a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Sign-up</a></li>
           {% endif %}
-           
         </ul>
       </nav><!-- .navbar -->
-
-        <div class="modal fade" id="interestModal" tabindex="-1" aria-labelledby="interestModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="interestModalLabel">Choose Your Interests</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="interestForm" method="post" action="{% url 'accounts:save_interests' %}">
-                        {% csrf_token %}
-                        <div class="modal-body">
-                            {% for interest in interests %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="interest{{ forloop.counter }}" name="interests" value="{{ interest.name }}">
-                                    <label class="form-check-label" for="interest{{ forloop.counter }}">{{ interest.name }}</label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="saveInterestsButton" data-bs-dismiss="modal">Save Interests</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-  </div>
 
       <div class="position-relative">
         <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
         <i class="bi bi-list mobile-nav-toggle"></i>
-        {% block content %}
+        
             <!-- ======= Search Form ======= -->
             <div class="search-form-wrap js-search-form-wrap">
               <form action="{% url 'search_results' %}?q=q" method="get" class="search-form" id = "search-form">
@@ -200,11 +171,37 @@
                 <button class="btn js-search-close"><span class="bi-x"></span></button>
               </form>
             </div><!-- End Search Form -->
-        {% endblock %}
+        
       </div>
     </div>
 
   </header><!-- End Header -->
+
+  <div class="modal fade" id="interestModal" tabindex="-1" aria-labelledby="interestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="interestModalLabel">Choose Your Interests</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="interestForm" method="post" action="{% url 'accounts:save_interests' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {% for interest in interests %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="interest{{ forloop.counter }}" name="interests" value="{{ interest.name }}">
+                                <label class="form-check-label" for="interest{{ forloop.counter }}">{{ interest.name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveInterestsButton" data-bs-dismiss="modal">Save Interests</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
   <main id="main">
 
@@ -219,8 +216,8 @@
                             <div class="swiper-wrapper">
                                 {% for value in data %}
                                     <div class="swiper-slide">
-                                        <a href="{{ value.url }}" class="img-bg d-flex align-items-end" style="background-image: url('{{ value.image }}');">
-                                            <div class="img-bg-inner">
+                                      <a href="{% url 'add_to_historic' %}?url={{ value.url }}&title={{ value.title }}&description={{ value.description }}&image={{ value.image }}&publishedat={{ value.publishedat }}" class="img-bg d-flex align-items-end" style="background-image: url('{{ value.image }}');">
+                                        <div class="img-bg-inner">
                                                 <h2>{{ value.title }}</h2>
                                                 <p>{{ value.description }}</p>
                                             </div>
@@ -248,57 +245,54 @@
       <div class="container" data-aos="fade-up">
         <div class="row g-5">
           <div class="col-lg-4">
-              {% if Sport_Data %}
             <div class="post-entry-1 lg">
-              <a href="{{ Sport_Data.0.url }}"><img src={{ Sport_Data.0.image  }} alt="" class="img-fluid"></a>
-              <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ Sport_Data.0.publishedat }}</span></div>
-              <h2><a href={{ Sport_Data.0.url }}>{{Sport_Data.0.title}}</a></h2>
-              <p class="mb-4 d-block">{{ Sport_Data.0.description }}</p>
+              <a href="{{ data_Sport.0.url }}"><img src={{ data_Sport.0.image  }} alt="" class="img-fluid"></a>
+              <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ data_Sport.0.publishedat }}</span></div>
+              <h2><a href={{ data_Sport.0.url }}>{{data_Sport.0.title}}</a></h2>
+              <p class="mb-4 d-block">{{ data_Sport.0.description }}</p>
 
               <div class="d-flex align-items-center author">
                 <div class="photo"><img src="static/img/person-1.jpg" alt="" class="img-fluid"></div>
                 <div class="name">
-                  <h3 class="m-0 p-0">{{ Sport_Data.0.author }}</h3>
+                  <h3 class="m-0 p-0">{{ data_Sport.0.author }}</h3>
                 </div>
               </div>
             </div>
-            {% endif %}
           </div>
-
           <div class="col-lg-8">
             <div class="row g-5">
               <div class="col-lg-4 border-start custom-border">
                 <div class="post-entry-1">
-                  <a href={{ Sport_Data.1.url }}><img src={{ Sport_Data.1.image }} alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ Sport_Data.0.publishedat }}</span></div>
-                  <h2><a href={{ Sport_Data.1.url }}>{{Sport_Data.1.title}}</a></h2>
+                  <a href={{ data_Technology.0.url }}><img src={{ data_Technology.0.image }} alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>{{ data_Technology.0.publishedat }}</span></div>
+                  <h2><a href={{ data_Technology.0.url }}>{{data_Technology.0.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-5.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Food</span> <span class="mx-1">&bullet;</span> <span>Jul 17th '22</span></div>
-                  <h2><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
+                  <a href={{ data_Science.0.url }}><img src={{ data_Science.0.image }} alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">Science</span> <span class="mx-1">&bullet;</span> <span>{{ data_Science.0.publishedat }}</span></div>
+                  <h2><a href={{ data_Science.0.url }}>{{data_Science.0.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-7.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Design</span> <span class="mx-1">&bullet;</span> <span>Mar 15th '22</span></div>
-                  <h2><a href="single-post.html">Why Craigslist Tampa Is One of The Most Interesting Places On the Web?</a></h2>
+                  <a href={{ data_Health.0.url }}><img src={{ data_Health.0.image }} alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">Health</span> <span class="mx-1">&bullet;</span> <span>{{ data_Health.0.publishedat }}</span></div>
+                  <h2><a href={{ data_Health.0.url }}>{{data_Health.0.title}}</a></h2>
                 </div>
               </div>
               <div class="col-lg-4 border-start custom-border">
                 <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-3.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2><a href="single-post.html">6 Easy Steps To Create Your Own Cute Merch For Instagram</a></h2>
+                  <a href={{ data_Culture.0.url }}><img src={{ data_Culture.0.image }} alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.0.publishedat }}</span></div>
+                  <h2><a href={{ data_Culture.0.url }}>{{data_Culture.0.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-6.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>Mar 1st '22</span></div>
-                  <h2><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
+                  <a href={{ data_Sport.1.url }}><img src={{ data_Sport.1.image }} alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ data_Sport.1.publishedat }}</span></div>
+                  <h2><a href={{ data_Sport.1.url }}>{{data_Sport.1.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href="single-post.html"><img src="static/img/post-landscape-8.jpg" alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Travel</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
+                  <a href={{ data_Entertainment.0.url }}><img src={{ data_Entertainment.0.image }} alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">Entertainment</span> <span class="mx-1">&bullet;</span> <span>{{ data_Entertainment.0.publishedat }}</span></div>
+                  <h2><a href={{ data_Entertainment.0.url }}>{{data_Entertainment.0.title}}</a></h2>
                 </div>
               </div>
 
@@ -355,102 +349,203 @@
     </section> <!-- End Post Grid Section -->
 
     <!-- ======= Culture Category Section ======= -->
-    <section class="category-section">
-      <div class="container" data-aos="fade-up">
 
-        <div class="section-header d-flex justify-content-between align-items-center mb-5">
-          <h2>Culture</h2>
-          <div><a href="category.html" class="more">See All Culture</a></div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-9">
-            {% if Culture_Data %}
-            <div class="d-lg-flex post-entry-2">
-              <a href="{{ Culture_Data.0.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
-                <img src={{ Culture_Data.0.image  }} alt="" class="img-fluid">
-              </a>
-              <div>
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.0.publishedat  }}</span></div>
-                <h3><a href={{ Culture_Data.0.url }}>{{ Culture_Data.0.title  }}</a></h3>
-                <p>{{ Culture_Data.0.description }}</p>
-                <div class="d-flex align-items-center author">
-                  <div class="name">
-                    <h3 class="m-0 p-0">{{ Culture_Data.0.author }}</h3>
+    {% if user.is_authenticated %}
+        {% if user_interests|length > 0 %}
+                <section class="category-section">
+                  <div class="container" data-aos="fade-up">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-5">
+                      <h2>{{ user_interests.0 }}</h2>
+                      <div><a href="category.html" class="more">See All Culture</a></div>
+                    </div>
+            
+                    <div class="row">
+                      <div class="col-md-9">
+            
+                        <div class="d-lg-flex post-entry-2">
+                          <a href="{{ data_0.0.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                            <img src={{ data_0.0.image  }} alt="" class="img-fluid">
+                          </a>
+                          <div>
+                            <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.0.publishedat  }}</span></div>
+                            <h3><a href={{ data_0.0.url }}>{{ data_0.0.title  }}</a></h3>
+                            <p>{{ data_0.0.description }}</p>
+                            <div class="d-flex align-items-center author">
+                              <div class="name">
+                                <h3 class="m-0 p-0">{{ data_0.0.author }}</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+            
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <div class="post-entry-1 border-bottom">
+                              <a href="{{ data_0.1.url  }}"><img src={{ data_0.1.image  }}alt="" class="img-fluid"></a>
+                              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.1.publishedat }}</span></div>
+                              <h2 class="mb-2"><a href={{ data_0.1.url  }}>{{ data_0.1.title  }}</a></h2>
+                              <span class="author mb-3 d-block">{{ data_0.1.author  }}</span>
+                              <p class="mb-4 d-block">{{ data_0.1.description  }}</p>
+                            </div>
+            
+                            <div class="post-entry-1">
+                              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.2.publishedat }}</span></div>
+                              <h2 class="mb-2"><a href={{ data_0.2.url  }}>{{ data_0.2.title  }}</a></h2>
+                              <span class="author mb-3 d-block">{{ data_0.2.author  }}</span>
+                            </div>
+                          </div>
+                          <div class="col-lg-8">
+                            <div class="post-entry-1">
+                              <a href={{ data_0.3.url  }}><img src={{ data_0.3.image  }} alt="" class="img-fluid"></a>
+                              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.3.publishedat  }}</span></div>
+                              <h2 class="mb-2"><a href={{ data_0.3.url  }}>{{ data_0.3.title  }}</a></h2>
+                              <span class="author mb-3 d-block">{{ data_0.3.author  }}</span>
+                              <p class="mb-4 d-block">{{ data_0.3.description  }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+            
+                      <div class="col-md-3">
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.4.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_0.4.url  }}>{{ data_0.4.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_0.4.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.5.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_0.5.url  }}>{{ data_0.5.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_0.5.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.6.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_0.6.url  }}>{{ data_0.6.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_0.6.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.7.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_0.7.url  }}>{{ data_0.7.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_0.7.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.8.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_0.8.url  }}>{{ data_0.8.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_0.8.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.9.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_0.9.url  }}>{{ data_0.9.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_0.9.author  }}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="post-entry-1 border-bottom">
-                  <a href="{{ Culture_Data.1.url  }}"><img src={{ Culture_Data.1.image  }}alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.1.publishedat }}</span></div>
-                  <h2 class="mb-2"><a href={{ Culture_Data.1.url  }}>{{ Culture_Data.1.title  }}</a></h2>
-                  <span class="author mb-3 d-block">{{ Culture_Data.1.author  }}</span>
-                  <p class="mb-4 d-block">{{ Culture_Data.1.description  }}</p>
-                </div>
-
-                <div class="post-entry-1">
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.2.publishedat }}</span></div>
-                  <h2 class="mb-2"><a href={{ Culture_Data.2.url  }}>{{ Culture_Data.2.title  }}</a></h2>
-                  <span class="author mb-3 d-block">{{ Culture_Data.2.author  }}</span>
-                </div>
-              </div>
-              <div class="col-lg-8">
-                <div class="post-entry-1">
-                  <a href={{ Culture_Data.3.url  }}><img src={{ Culture_Data.3.image  }} alt="" class="img-fluid"></a>
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.3.publishedat  }}</span></div>
-                  <h2 class="mb-2"><a href={{ Culture_Data.3.url  }}>{{ Culture_Data.3.title  }}</a></h2>
-                  <span class="author mb-3 d-block">{{ Culture_Data.3.author  }}</span>
-                  <p class="mb-4 d-block">{{ Culture_Data.3.description  }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.4.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.4.url  }}>{{ Culture_Data.4.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.4.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.5.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.5.url  }}>{{ Culture_Data.5.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.5.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.6.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.6.url  }}>{{ Culture_Data.6.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.6.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.7.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.7.url  }}>{{ Culture_Data.7.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.7.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.8.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.8.url  }}>{{ Culture_Data.8.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.8.author  }}</span>
-            </div>
-
-            <div class="post-entry-1 border-bottom">
-              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ Culture_Data.9.publishedat  }}</span></div>
-              <h2 class="mb-2"><a href={{ Culture_Data.9.url  }}>{{ Culture_Data.9.title  }}</a></h2>
-              <span class="author mb-3 d-block">{{ Culture_Data.9.author  }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+                </section><!-- End Culture Category Section -->
         {% endif %}
-    </section><!-- End Culture Category Section -->
+    {% endif %}
+
+    {% if not user.is_authenticated %}
+                <section class="category-section">
+                  <div class="container" data-aos="fade-up">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-5">
+                      <h2>Culture</h2>
+                      <div><a href="category.html" class="more">See All Culture</a></div>
+                    </div>
+            
+                    <div class="row">
+                      <div class="col-md-9">
+            
+                        <div class="d-lg-flex post-entry-2">
+                          <a href="{{ data_Culture.0.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                            <img src={{ data_Culture.0.image  }} alt="" class="img-fluid">
+                          </a>
+                          <div>
+                            <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.0.publishedat  }}</span></div>
+                            <h3><a href={{ data_Culture.0.url }}>{{ data_Culture.0.title  }}</a></h3>
+                            <p>{{ data_Culture.0.description }}</p>
+                            <div class="d-flex align-items-center author">
+                              <div class="name">
+                                <h3 class="m-0 p-0">{{ data_Culture.0.author }}</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+            
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <div class="post-entry-1 border-bottom">
+                              <a href="{{ data_Culture.1.url  }}"><img src={{ data_Culture.1.image  }}alt="" class="img-fluid"></a>
+                              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.1.publishedat }}</span></div>
+                              <h2 class="mb-2"><a href={{ data_Culture.1.url  }}>{{ data_Culture.1.title  }}</a></h2>
+                              <span class="author mb-3 d-block">{{ data_Culture.1.author  }}</span>
+                              <p class="mb-4 d-block">{{ data_Culture.1.description  }}</p>
+                            </div>
+            
+                            <div class="post-entry-1">
+                              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.2.publishedat }}</span></div>
+                              <h2 class="mb-2"><a href={{ data_Culture.2.url  }}>{{ data_Culture.2.title  }}</a></h2>
+                              <span class="author mb-3 d-block">{{ data_Culture.2.author  }}</span>
+                            </div>
+                          </div>
+                          <div class="col-lg-8">
+                            <div class="post-entry-1">
+                              <a href={{ data_Culture.3.url  }}><img src={{ data_Culture.3.image  }} alt="" class="img-fluid"></a>
+                              <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.3.publishedat  }}</span></div>
+                              <h2 class="mb-2"><a href={{ data_Culture.3.url  }}>{{ data_Culture.3.title  }}</a></h2>
+                              <span class="author mb-3 d-block">{{ data_Culture.3.author  }}</span>
+                              <p class="mb-4 d-block">{{ data_Culture.3.description  }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+            
+                      <div class="col-md-3">
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.4.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_Culture.4.url  }}>{{ data_Culture.4.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_Culture.4.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.5.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_Culture.5.url  }}>{{ data_Culture.5.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_Culture.5.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.6.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_Culture.6.url  }}>{{ data_Culture.6.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_Culture.6.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.7.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_Culture.7.url  }}>{{ data_Culture.7.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_Culture.7.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.8.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_Culture.8.url  }}>{{ data_Culture.8.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_Culture.8.author  }}</span>
+                        </div>
+            
+                        <div class="post-entry-1 border-bottom">
+                          <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.9.publishedat  }}</span></div>
+                          <h2 class="mb-2"><a href={{ data_Culture.9.url  }}>{{ data_Culture.9.title  }}</a></h2>
+                          <span class="author mb-3 d-block">{{ data_Culture.9.author  }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section><!-- End Culture Category Section -->
+    {% endif %}
+    
 
     <!-- ======= Business Category Section ======= -->
     <section class="category-section">
