@@ -139,7 +139,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'newsapp/static')]
 
 LOGIN_URL = 'accounts:user_login'
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

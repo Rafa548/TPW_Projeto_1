@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect , get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
-from newsapp.api_key import API_KEY
 import requests
 from django.contrib.auth.decorators import login_required
 import subprocess
@@ -12,10 +11,55 @@ from accounts.models import User
 from .forms import NewsSaveForm, SearchForm
 
 
+from django.core.management.base import BaseCommand
+
+from django.conf import settings
+import os
+import requests
+
+API_KEYS = [
+   "fde47eb1fd3c4768964eb3d3bd9eaae2",
+   "7dfa405963a9460693136651c8006b36",
+   "dbb12ae7153a417b85f1b3ea8f8bfe6e",
+]
+
+current_key_index = 0
+API_KEY = API_KEYS[current_key_index]
+    
+def select_new_api_key():
+    global API_KEY  
+    global current_key_index
+    if is_rate_limited(API_KEY):
+        next_key_index = (current_key_index + 1) % len(API_KEYS)
+    else:
+        return API_KEY
+
+    for _ in range(len(API_KEYS)):
+        next_key = API_KEYS[next_key_index]
+        if not is_rate_limited(next_key):
+            print(f"Switching to API key {next_key}")
+            return next_key
+        next_key_index = (next_key_index + 1) % len(API_KEYS)
+
+    return None
+
+def is_rate_limited(api_key):
+    url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
+                "us",1,api_key
+            )
+    response = requests.get(url)
+    if response.status_code == 429:  # HTTP 429 indicates rate limiting
+        print(f"API key {api_key} is rate limited.")
+        return True
+    return False
+
+
+
 temp_img = "https://images.pexels.com/photos/3225524/pexels-photo-3225524.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
 #  https://www.w3schools.com/code/tryit.asp?filename=GJ8R42LMFRLP
 
 def home(request):
+    API_KEY = select_new_api_key()
     page = request.GET.get('page', 1)
     search = request.GET.get('search', None)
     url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
@@ -120,6 +164,7 @@ def home(request):
     return render(request, 'index.html', context=context)
 
 def search_results(request):
+    API_KEY = select_new_api_key()
     if request.method == 'GET':
         query = request.GET.get('q', '')  # Get the search query from the request
         print("query:",query)
@@ -174,6 +219,7 @@ def search_results(request):
 
 
 def category(request):
+    API_KEY = select_new_api_key()
     if request.method == 'GET':
         query = request.GET.get('q', '')  # Get the search query from the request
         print("query:",query)
@@ -228,21 +274,23 @@ def category(request):
         data_popular = data_popular["articles"]
 
 
-        saved_news = request.user.user_saved_news.all()
+        
         saved_news_url = []
-        for i in saved_news:
-            saved_news_url.append(i.url)
-
+        if request.user.is_authenticated:
+            saved_news = request.user.user_saved_news.all()
+            for i in saved_news:
+                saved_news_url.append(i.url)
+        
         context = {
-        "success": True,
-        "data": [],
-        "Popular_Data": [],
-        "Trending_Data": [],
-        "Latest_Data": [],
-        "search": query,
-        "current_page": int(npage),
-        "page_range": range(1,6),
-        "saved_news_url": saved_news_url
+            "success": True,
+            "data": [],
+            "Popular_Data": [],
+            "Trending_Data": [],
+            "Latest_Data": [],
+            "search": query,
+            "current_page": int(npage),
+            "page_range": range(1,6),
+            "saved_news_url": saved_news_url
         }
 
         for i in data:
@@ -302,6 +350,7 @@ def category(request):
 
 
 def loadcontent(request):
+    API_KEY = select_new_api_key()
     try:
         page = request.GET.get('page', 1)
         search = request.GET.get('search', None)
