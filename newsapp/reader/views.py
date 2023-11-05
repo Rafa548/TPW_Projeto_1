@@ -126,7 +126,7 @@ def search_results(request):
         npage = request.GET.get('page', 1)
 
         url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-            query, "popularity", npage, settings.API_KEY
+            query, "popularity", npage, API_KEY
         )
 
         r = requests.get(url=url)
@@ -180,28 +180,28 @@ def category(request):
         npage = request.GET.get('page', 1)  # Get the search query from the request
 
         url = "https://newsapi.org/v2/everything?q={}&page={}&apiKey={}".format(
-            query, npage, settings.APIKEY
+            query, npage, API_KEY
         )
         print("url:",url)
 
         r = requests.get(url=url)
 
         trending_url = "https://newsapi.org/v2/top-headlines?sortBy={}&country=us&page={}&apiKey={}".format(
-              "popularity", 1, settings.APIKEY
+              "popularity", 1, API_KEY
         )
         print("trending_url:",trending_url)
 
         r_trending = requests.get(url=trending_url)
 
         latest_url = "https://newsapi.org/v2/top-headlines?country=us&page={}&apiKey={}&sortBy={}".format(
-             1, settings.APIKEY,"publishedAt"
+             1, API_KEY,"publishedAt"
         )
         print("latest_url:", latest_url)
 
         r_latest = requests.get(url=latest_url)
 
         popular_url = "https://newsapi.org/v2/everything?q={}&page={}&apiKey={}&sortBy={}".format(
-            query, 1, settings.APIKEY,"popularity"
+            query, 1, API_KEY,"popularity"
         )
         print("popular_url:", popular_url)
 
@@ -306,15 +306,15 @@ def loadcontent(request):
         page = request.GET.get('page', 1)
         search = request.GET.get('search', None)
         # url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-        #     "Technology","popularity",page,settings.APIKEY
+        #     "Technology","popularity",page,API_KEY
         # )
         if search is None or search=="top":
             url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
-                "us",page,settings.APIKEY
+                "us",page,API_KEY
             )
         else:
             url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-                search,"popularity",page,settings.APIKEY
+                search,"popularity",page,API_KEY
             )
         print("url:",url)
         r = requests.get(url=url)
