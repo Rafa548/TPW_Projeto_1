@@ -116,9 +116,6 @@ def home(request):
                     "publishedat": i["publishedAt"].split("T")[0]
                 })
             x+=1
-    current_api_key = API_KEY
-    subprocess.call(["python", "manage.py", "rotate_api_key"])
-    current_api_key = API_KEY
     # send the news feed to template in context
     return render(request, 'index.html', context=context)
 
