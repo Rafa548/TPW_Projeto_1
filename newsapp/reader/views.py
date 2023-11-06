@@ -60,128 +60,55 @@ def is_rate_limited(api_key):
 temp_img = "https://images.pexels.com/photos/3225524/pexels-photo-3225524.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
 #  https://www.w3schools.com/code/tryit.asp?filename=GJ8R42LMFRLP
 
-#@cache_page(60 * 30)
 def home(request):
-    API_KEY = select_new_api_key()
-    page = request.GET.get('page', 1)
-    search = request.GET.get('search', None)
-    notifications = 0
-    url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
-            "us",1,API_KEY
-        )
-    print("url:", url)
-    r = requests.get(url=url)
+    user = request.user
+    cache_key = f"newsfeed_{user.id}"
+    cached_page = cache.get(cache_key)
 
-    default_interests = ["Technology", "Science", "Health", "Entertainment", "Sport", "Culture"]
-
-    context = {
-            "success": True,
-            "data": [],
-            "interests": Interest.objects.all(),
-            "user_interests": [],
-            "notifications": notifications,
-            "notifications_news": [],
-        }
-    
-    data = r.json()
-    if data["status"] != "ok":
-        return HttpResponse("<h1>Request Failed</h1>")
-    data = data["articles"]
-
-    # separating the necessary data
-    for i in data:
-        if i["title"] == "[Removed]":
-                continue
-        if i["author"] is None:
-            i["author"] = "Anonymous"
-        context["data"].append({
-            "title": i["title"],
-            "author": i["author"],
-            "description":  "" if i["description"] is None else i["description"],
-            "url": i["url"],
-            "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
-            "publishedat": i["publishedAt"].split("T")[0]
-        })
-
-    for interest in default_interests:
-        search = interest
-        url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-            search, "popularity", page, API_KEY
-        )
+    if cached_page is None:
+        API_KEY = select_new_api_key()
+        page = request.GET.get('page', 1)
+        search = request.GET.get('search', None)
+        notifications = 0
+        url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
+                "us",1,API_KEY
+            )
         print("url:", url)
         r = requests.get(url=url)
+
+        default_interests = ["Technology", "Science", "Health", "Entertainment", "Sport", "Culture"]
+
+        context = {
+                "success": True,
+                "data": [],
+                "interests": Interest.objects.all(),
+                "user_interests": [],
+                "notifications": notifications,
+                "notifications_news": [],
+            }
+        
         data = r.json()
         if data["status"] != "ok":
             return HttpResponse("<h1>Request Failed</h1>")
         data = data["articles"]
 
-        context["data_"+search] = []
-
+        # separating the necessary data
         for i in data:
             if i["title"] == "[Removed]":
-                continue
+                    continue
             if i["author"] is None:
                 i["author"] = "Anonymous"
-            context["data_"+search].append({
+            context["data"].append({
                 "title": i["title"],
                 "author": i["author"],
-                "description": "" if i["description"] is None else i["description"],
+                "description":  "" if i["description"] is None else i["description"],
                 "url": i["url"],
                 "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
                 "publishedat": i["publishedAt"].split("T")[0]
             })
-        if search == "Sport":
-            print("context:", "data_"+search)
 
-    if request.user.is_authenticated:
-        user = request.user
-        interests = user.interests.all()
-        last_news_titles = user.user_last_news.values_list('title', flat=True)
-        last_news = list(last_news_titles)
-
-        x=0
-        for interest in interests:
-            context["user_interests"].append(interest.name)
-            search = interest.name
-
-
-            url1 = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
-                search, "publishedAt", page, API_KEY
-            )
-            r1 = requests.get(url=url1)
-            data1 = r1.json()
-            if data1["status"] != "ok":
-                return HttpResponse("<h1>Request Failed</h1>")
-            data1 = data1["articles"]
-
-            for i in data1:
-                if i["title"] == "[Removed]":
-                    continue
-                if i["author"] is None:
-                    i["author"] = "Anonymous"
-                if i["description"] is None:
-                    i["description"] = "No description provided"
-                if page == 1 and i["title"] not in last_news:
-                    new = News(url=i["url"], title=i["title"], description=i["description"], image=i["urlToImage"], created_at=i["publishedAt"])
-                    #print("new:", new)
-                    if new not in News.objects.all():
-                        new.save()
-                    user.user_last_news.add(new)
-                    if notifications < 10:
-                        context["notifications_news"].append({
-                            "title": i["title"],
-                            "author": i["author"],
-                            "description": "No description provided" if i["description"] is None else i["description"],
-                            "url": i["url"],
-                            "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
-                            "publishedat": i["publishedAt"]
-                        })
-                        notifications+=1
-                
-        
-            context["notifications"] += notifications
-
-
+        for interest in default_interests:
+            search = interest
             url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
                 search, "popularity", page, API_KEY
             )
@@ -192,14 +119,14 @@ def home(request):
                 return HttpResponse("<h1>Request Failed</h1>")
             data = data["articles"]
 
-            context["data_"+str(x)] = []
-            
+            context["data_"+search] = []
+
             for i in data:
                 if i["title"] == "[Removed]":
                     continue
                 if i["author"] is None:
                     i["author"] = "Anonymous"
-                context["data_"+str(x)].append({
+                context["data_"+search].append({
                     "title": i["title"],
                     "author": i["author"],
                     "description": "" if i["description"] is None else i["description"],
@@ -207,10 +134,92 @@ def home(request):
                     "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
                     "publishedat": i["publishedAt"].split("T")[0]
                 })
-            x+=1
-        print("notifications:", notifications)
-    # send the news feed to template in context
-    return render(request, 'index.html', context=context)
+            if search == "Sport":
+                print("context:", "data_"+search)
+
+        if request.user.is_authenticated:
+            user = request.user
+            interests = user.interests.all()
+            last_news_titles = user.user_last_news.values_list('title', flat=True)
+            last_news = list(last_news_titles)
+
+            x=0
+            for interest in interests:
+                context["user_interests"].append(interest.name)
+                search = interest.name
+
+
+                url1 = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+                    search, "publishedAt", page, API_KEY
+                )
+                r1 = requests.get(url=url1)
+                data1 = r1.json()
+                if data1["status"] != "ok":
+                    return HttpResponse("<h1>Request Failed</h1>")
+                data1 = data1["articles"]
+
+                for i in data1:
+                    if i["title"] == "[Removed]":
+                        continue
+                    if i["author"] is None:
+                        i["author"] = "Anonymous"
+                    if i["description"] is None:
+                        i["description"] = "No description provided"
+                    if page == 1 and i["title"] not in last_news:
+                        new = News(url=i["url"], title=i["title"], description=i["description"], image=i["urlToImage"], created_at=i["publishedAt"])
+                        #print("new:", new)
+                        if new not in News.objects.all():
+                            new.save()
+                        user.user_last_news.add(new)
+                        if notifications < 10:
+                            context["notifications_news"].append({
+                                "title": i["title"],
+                                "author": i["author"],
+                                "description": "No description provided" if i["description"] is None else i["description"],
+                                "url": i["url"],
+                                "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                                "publishedat": i["publishedAt"]
+                            })
+                            notifications+=1
+                    
+            
+                context["notifications"] += notifications
+
+
+                url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+                    search, "popularity", page, API_KEY
+                )
+                print("url:", url)
+                r = requests.get(url=url)
+                data = r.json()
+                if data["status"] != "ok":
+                    return HttpResponse("<h1>Request Failed</h1>")
+                data = data["articles"]
+
+                context["data_"+str(x)] = []
+                
+                for i in data:
+                    if i["title"] == "[Removed]":
+                        continue
+                    if i["author"] is None:
+                        i["author"] = "Anonymous"
+                    context["data_"+str(x)].append({
+                        "title": i["title"],
+                        "author": i["author"],
+                        "description": "" if i["description"] is None else i["description"],
+                        "url": i["url"],
+                        "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                        "publishedat": i["publishedAt"].split("T")[0]
+                    })
+                x+=1
+            print("notifications:", notifications)
+        # send the news feed to template in context
+        rendered_page = render(request, 'index.html', context=context)
+        cache.set(cache_key, rendered_page, settings.CACHE_TIMEOUT)
+        return rendered_page
+    else:
+        return cached_page
+
 
 def search_results(request):
     API_KEY = select_new_api_key()

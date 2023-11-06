@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout,update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
 from .forms import UserRegistrationForm, UserLoginForm, ManagerLoginForm, EditProfileForm, InterestsForm
 from accounts.models import User, Interest
+
 
 
 def create_manager():
@@ -88,6 +90,7 @@ def user_profile(request,userid):
 
 @login_required
 def edit_profile(request, userid):
+    existing_interests = request.user.interests.all()
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -103,7 +106,13 @@ def edit_profile(request, userid):
 
                 form.save()
                 # Update the session authentication hash
+                updated_interests = request.user.interests.all()
+                if existing_interests != updated_interests:
+                    user  = request.user
+                    cache_key = f'user_home_{user.id}'
+                    cache.delete(cache_key)
                 update_session_auth_hash(request, request.user)
+                
                 #profile_url = reverse('user_profile', kwargs={'userid': userid})
                 return render(request, 'user_profile.html', {'user': request.user})
             else:
@@ -121,5 +130,5 @@ def save_interests(request):
     if request.method == 'POST':
         selected_interests = request.POST.getlist('interests')
         request.user.interests.set(Interest.objects.filter(name__in=selected_interests))
-        return redirect('home')
-    return redirect('home')
+        return redirect('reader:home')
+    return redirect('reader:home')
