@@ -1,8 +1,5 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
-
-from . import models
-
 from .models import User, Interest
 
 
@@ -37,19 +34,6 @@ class UserRegistrationForm(forms.Form):
     )
 
 
-class ManagerLoginForm(forms.Form):
-    email = forms.EmailField(
-        widget=forms.EmailInput(
-            attrs={'class': 'form-control', 'placeholder': 'email'}
-        )
-    )
-    password = forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={'class': 'form-control', 'placeholder': 'password'}
-        )
-    )
-
-
 class EditProfileForm(UserChangeForm):
     new_password = forms.CharField(
         label="New Password",
@@ -63,19 +47,16 @@ class EditProfileForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('full_name', 'email', 'interests', 'is_manager')
+        fields = ('full_name', 'email', 'interests')
 
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
-        # Remove the password fields from the form instance
         del self.fields['password']
 
     def clean_current_password(self):
         current_password = self.cleaned_data.get('current_password')
-
         if not self.instance.check_password(current_password):
             raise forms.ValidationError("Invalid current password")
-
         return current_password
 
     def clean_new_password(self):

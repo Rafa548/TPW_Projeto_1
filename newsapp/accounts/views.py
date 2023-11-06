@@ -4,41 +4,9 @@ from django.contrib.auth import authenticate, login, logout,update_session_auth_
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 
-from .forms import UserRegistrationForm, UserLoginForm, ManagerLoginForm, EditProfileForm, InterestsForm
+from .forms import UserRegistrationForm, UserLoginForm, EditProfileForm, InterestsForm
 from accounts.models import User, Interest
 
-
-
-def create_manager():
-    if not User.objects.filter(email="manager@example.com").first():
-        user = User.objects.create_user(
-            "manager@example.com", 'shop manager' ,'managerpass1234'
-        )
-        # give this user manager role
-        user.is_manager = True
-        user.save()
-
-
-def manager_login(request):
-    if request.method == 'POST':
-        form = ManagerLoginForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            user = authenticate(
-                request, email=data['email'], password=data['password']
-            )
-            if user is not None and user.is_manager:
-                login(request, user)
-                return redirect('dashboard:products')
-            else:
-                messages.error(
-                    request, 'username or password is wrong', 'danger'
-                )
-                return redirect('accounts:manager_login')
-    else:
-        form = ManagerLoginForm()
-    context = {'form': form}
-    return render(request, 'manager_login.html', context)
 
 
 def user_register(request):
@@ -97,15 +65,13 @@ def edit_profile(request, userid):
             current_password = form.cleaned_data['current_password']
             new_password = form.cleaned_data['new_password']
 
-            # Verify the current password
             if request.user.check_password(current_password):
                 if new_password:
-                    # Change the user's password
                     request.user.set_password(new_password)
                     request.user.save()
 
                 form.save()
-                # Update the session authentication hash
+                
                 updated_interests = request.user.interests.all()
                 if existing_interests != updated_interests:
                     user  = request.user
@@ -113,7 +79,6 @@ def edit_profile(request, userid):
                     cache.delete(cache_key)
                 update_session_auth_hash(request, request.user)
                 
-                #profile_url = reverse('user_profile', kwargs={'userid': userid})
                 return render(request, 'user_profile.html', {'user': request.user})
             else:
                 form.add_error('current_password', 'Invalid current password')
@@ -124,11 +89,10 @@ def edit_profile(request, userid):
 
 
 
-
 @login_required
 def save_interests(request):
     if request.method == 'POST':
         selected_interests = request.POST.getlist('interests')
         request.user.interests.set(Interest.objects.filter(name__in=selected_interests))
-        return redirect('reader:home')
-    return redirect('reader:home')
+        return redirect('home')
+    return redirect('home')

@@ -15,12 +15,9 @@ class User(AbstractBaseUser):
     full_name = models.CharField(max_length=100)
     interests = models.ManyToManyField(Interest, blank=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    user_saved_news = models.ManyToManyField(News, blank=True, related_name='likes')
+    user_saved_news = models.ManyToManyField(News, blank=True, related_name='saved_news')
     user_last_news = models.ManyToManyField(News, blank=True, related_name='last_news')
     user_news_historic = models.ManyToManyField(News, blank=True, related_name='historic')
-    # set a manager role for shop manager to access orders and products
-    is_manager = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -43,18 +40,7 @@ class User(AbstractBaseUser):
     def get_interests(self):
         return list(self.interests.all())
 
-    def add_interest(self, news_item):
-        self.interests.add(news_item)
-
-    def remove_interest(self, news_item):
-        self.interests.remove(news_item)
-
     def get_saved_news(self):
         return list(self.user_saved_news.all())
     
-    def add_saved_news(self, news_item):
-        self.user_saved_news.add(news_item)
-    
-    def add_to_historic(self, news_item):
-        self.user_news_historic.add(news_item)
         
