@@ -10,6 +10,8 @@ from reader.models import News
 from accounts.models import User
 from .forms import NewsSaveForm, SearchForm
 
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 from django.core.management.base import BaseCommand
 
@@ -58,10 +60,12 @@ def is_rate_limited(api_key):
 temp_img = "https://images.pexels.com/photos/3225524/pexels-photo-3225524.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
 #  https://www.w3schools.com/code/tryit.asp?filename=GJ8R42LMFRLP
 
+#@cache_page(60 * 30)
 def home(request):
     API_KEY = select_new_api_key()
     page = request.GET.get('page', 1)
     search = request.GET.get('search', None)
+    notifications = 0
     url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
             "us",1,API_KEY
         )
@@ -75,6 +79,8 @@ def home(request):
             "data": [],
             "interests": Interest.objects.all(),
             "user_interests": [],
+            "notifications": notifications,
+            "notifications_news": [],
         }
     
     data = r.json()
@@ -130,10 +136,52 @@ def home(request):
     if request.user.is_authenticated:
         user = request.user
         interests = user.interests.all()
+        last_news_titles = user.user_last_news.values_list('title', flat=True)
+        last_news = list(last_news_titles)
+
         x=0
         for interest in interests:
             context["user_interests"].append(interest.name)
             search = interest.name
+
+
+            url1 = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+                search, "publishedAt", page, API_KEY
+            )
+            r1 = requests.get(url=url1)
+            data1 = r1.json()
+            if data1["status"] != "ok":
+                return HttpResponse("<h1>Request Failed</h1>")
+            data1 = data1["articles"]
+
+            for i in data1:
+                if i["title"] == "[Removed]":
+                    continue
+                if i["author"] is None:
+                    i["author"] = "Anonymous"
+                if i["description"] is None:
+                    i["description"] = "No description provided"
+                if page == 1 and i["title"] not in last_news:
+                    new = News(url=i["url"], title=i["title"], description=i["description"], image=i["urlToImage"], created_at=i["publishedAt"])
+                    #print("new:", new)
+                    if new not in News.objects.all():
+                        new.save()
+                    user.user_last_news.add(new)
+                    if notifications < 10:
+                        context["notifications_news"].append({
+                            "title": i["title"],
+                            "author": i["author"],
+                            "description": "No description provided" if i["description"] is None else i["description"],
+                            "url": i["url"],
+                            "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                            "publishedat": i["publishedAt"]
+                        })
+                        notifications+=1
+                
+        
+            context["notifications"] += notifications
+
+
             url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
                 search, "popularity", page, API_KEY
             )
@@ -160,6 +208,7 @@ def home(request):
                     "publishedat": i["publishedAt"].split("T")[0]
                 })
             x+=1
+        print("notifications:", notifications)
     # send the news feed to template in context
     return render(request, 'index.html', context=context)
 
@@ -170,7 +219,7 @@ def search_results(request):
         print("query:",query)
         npage = request.GET.get('page', 1)
 
-        url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+        url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&searchIn=title&apiKey={}".format(
             query, "popularity", npage, API_KEY
         )
 
@@ -191,12 +240,19 @@ def search_results(request):
             # 'search_results': search_results,  # Uncomment this line if you have search results to display
         #}
 
+        saved_news_url = []
+        if request.user.is_authenticated:
+            saved_news = request.user.user_saved_news.all()
+            for i in saved_news:
+                saved_news_url.append(i.url)
+
         context = {
         "success": True,
         "data": [],
         "search": query,
         "current_page": int(npage),
-        "page_range": range(1,6)
+        "page_range": range(1,6),
+        "saved_news_url": saved_news_url
         }
 
         for i in data:
@@ -217,7 +273,7 @@ def search_results(request):
     return render(request, 'search-result.html')
 
 
-
+@cache_page(60 * 30)
 def category(request):
     API_KEY = select_new_api_key()
     if request.method == 'GET':
@@ -480,3 +536,13 @@ def add_to_historic(request):
 
     # Redirect to the original news URL
     return redirect(news_url)
+
+def get_cached_data(url, cache_key, cache_timeout):
+    cached_data = cache.get(cache_key)
+    if cached_data is None:
+        response = requests.get(url)
+        data = response.json()
+        cache.set(cache_key, data, cache_timeout)
+    else:
+        data = cached_data
+    return data

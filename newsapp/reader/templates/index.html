@@ -173,6 +173,79 @@
             </div><!-- End Search Form -->
         
       </div>
+    <!-- Notification bell -->
+    <style>
+      .pending {
+          background-color: red;
+          color: white;
+          border-radius: 50%;
+          padding: 5px 10px;
+          font-size: 12px;
+          position: relative;
+          top: 0px;
+          margin-left: 0px;
+      }
+      .truncate-text {
+          display: inline-block;
+          max-width: 190px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .notification-item {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+        }
+
+        .notification-image {
+          flex: 1;
+          margin-right: 10px;
+        }
+
+        .notification-image img {
+          max-width: 80px;
+          max-height: 80px;
+          border-radius: 5px;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+        }
+
+        .notification-content {
+          flex: 3;
+        }
+        .dropdown-menu {
+          max-height: 500px;
+          overflow-y: auto;
+        }
+  </style>
+  {% if user.is_authenticated %}
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        {% if notifications == 0 %}
+          <span class="bi-bell"></span>
+        {% else %}
+          <span class="pending">{{ notifications }}</span>
+          <span class="bi-bell"></span>
+        {% endif %}
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        {% for notification in notifications_news %}
+        <li>
+          <a class="dropdown-item" href="{{ notification.url }}">
+            <div class="notification-item">
+              <div class="notification-image">
+                <img src="{{ notification.image }}" alt="{{ notification.title }}">
+              </div>
+              <div class="notification-content">
+                <span class="truncate-text">{{ notification.title }}</span>
+              </div>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+  </div>
+  {% endif %}
     </div>
 
   </header><!-- End Header -->

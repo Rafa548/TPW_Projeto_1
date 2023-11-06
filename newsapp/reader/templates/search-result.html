@@ -200,6 +200,24 @@ License: https://bootstrapmade.com/license/
                     <h3 class="m-0 p-0">{{ data.author }}</h3>
                   </div>
                 </div>
+                <form id="news-form" method="Post">
+                  {% csrf_token %}
+                  <input type="hidden" name="news_url" value="{{ data.url }}">
+                  <input type="hidden" name="news_title" value="{{ data.title }}">
+                  <input type="hidden" name="news_description" value="{{ data.description }}">
+                  <input type="hidden" name="news_image" value="{{ data.image }}">
+                  <input type="hidden" name="news_publishedat" value="{{ data.publishedat }}">
+                  {% if user.is_authenticated %}
+                  
+                  {% if data.url not in saved_news_url %}
+                      <button type="button" class="btn btn-primary save-button" data-news-url="{{ data.url }}">Save</button>
+                  {% else %}
+                      <button type="button" class="btn btn-warning remove-button" data-news-url="{{ data.url }}">Remove</button>
+                  {% endif %}
+            
+                  {% endif %}
+                </form>
+
               </div>
             </div>
             {% endfor %}
@@ -285,6 +303,7 @@ License: https://bootstrapmade.com/license/
   <script src="static/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="static/vendor/aos/aos.js"></script>
   <script src="static/vendor/php-email-form/validate.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="static/js/main.js"></script>
@@ -301,6 +320,66 @@ License: https://bootstrapmade.com/license/
             searchForm.submit();
         }
     });
+</script>
+
+<script>
+  $(document).ready(function () {
+      // Function to handle the "Save" button click
+      function handleSaveButtonClick() {
+          var button = $(this);
+          var newsUrl = button.data("news-url");
+          var form = button.closest("form");
+
+          $.ajax({
+              type: "POST",
+              url: "{% url 'save_news' %}",
+              data: form.serialize(),
+              success: function (response) {
+                  if (response.success) {
+                      // Change button text and class
+                      button.text("Remove");
+                      button.removeClass("btn-primary").addClass("btn-warning");
+                      button.removeClass("save-button").addClass("remove-button");
+                      // Update the click event to handle removal
+                      button.off("click").on("click", handleRemoveButtonClick);
+                  }
+              },
+              error: function (error) {
+                  console.error("Error:", error);
+              }
+          });
+      }
+
+      // Function to handle the "Remove" button click
+      function handleRemoveButtonClick() {
+          var button = $(this);
+          var newsUrl = button.data("news-url");
+          var form = button.closest("form");
+
+          $.ajax({
+              type: "POST",
+              url: "{% url 'delete_news' %}",
+              data: form.serialize(),
+              success: function (response) {
+                  if (response.success) {
+                      // Change button text and class
+                      button.text("Save");
+                      button.removeClass("btn-warning").addClass("btn-primary");
+                      button.removeClass("remove-button").addClass("save-button");
+                      // Update the click event to handle saving
+                      button.off("click").on("click", handleSaveButtonClick);
+                  }
+              },
+              error: function (error) {
+                  console.error("Error:", error);
+              }
+          });
+      }
+
+      // Attach the initial click event handlers
+      $(".save-button").on("click", handleSaveButtonClick);
+      $(".remove-button").on("click", handleRemoveButtonClick);
+  });
 </script>
 
 </body>

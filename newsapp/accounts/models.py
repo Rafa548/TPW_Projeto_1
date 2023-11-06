@@ -17,6 +17,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user_saved_news = models.ManyToManyField(News, blank=True, related_name='likes')
+    user_last_news = models.ManyToManyField(News, blank=True, related_name='last_news')
     user_news_historic = models.ManyToManyField(News, blank=True, related_name='historic')
     # set a manager role for shop manager to access orders and products
     is_manager = models.BooleanField(default=False)
