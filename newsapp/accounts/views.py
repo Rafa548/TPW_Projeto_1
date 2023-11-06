@@ -81,18 +81,38 @@ def user_logout(request):
     return redirect('accounts:user_login')
 
 
-def edit_profile(request, userid):
+def user_profile(request,userid):
     user = get_object_or_404(User, id=userid)
-    form = EditProfileForm(request.POST, instance=user)
-    if form.is_valid():
-        print("válido")
-        form.save()
-        messages.success(request, 'Your profile has been updated', 'success')
-        return redirect('accounts:edit_profile')
+    context = {'title':'Profile', 'user':user}
+    return render(request, 'user_profile.html', context)
+
+@login_required
+def edit_profile(request, userid):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            current_password = form.cleaned_data['current_password']
+            new_password = form.cleaned_data['new_password']
+
+            # Verify the current password
+            if request.user.check_password(current_password):
+                if new_password:
+                    # Change the user's password
+                    request.user.set_password(new_password)
+                    request.user.save()
+
+                form.save()
+                # Update the session authentication hash
+                update_session_auth_hash(request, request.user)
+                #profile_url = reverse('user_profile', kwargs={'userid': userid})
+                return render(request, 'user_profile.html', {'user': request.user})
+            else:
+                form.add_error('current_password', 'Invalid current password')
     else:
-        form = EditProfileForm(instance=user)
-    context = {'title':'Edit Profile', 'form':form}
-    return render(request, 'edit_profile.html', context)
+        form = EditProfileForm(instance=request.user)
+
+    return render(request, 'edit_profile.html', {'form': form})
+
 
 
 

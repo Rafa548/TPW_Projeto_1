@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Welcome, {{ user.full_name }}</h1>
+
+    <h2>Your Profile:</h2>
+    <ul>
+        <li><strong>Name</strong> {{ user.full_name }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+    </ul>
+
+    <h2>Your Interests:</h2>
+    <ul>
+        {% for interest in user.interests.all %}
+            <li>{{ interest.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Your Saved News:</h2>
+    <ul class="cards">
+        {% for news in user.user_saved_news.all %}
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image" style="background-image: url('{{ news.image }}')"></div>
+                    <div class="card__content">
+                        <div class="card__title">{{ news.title }}</div>
+                        <p class="card__text">{{ news.description }}</p>
+                        <a href="{{ news.url }}" class="btn btn--block card__btn">Read More</a>
+                        <button type="button" class="btn btn-warning remove-button" data-news_url="{{ news.url }}">Remove</button>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Your News Historic:</h2>
+    <ul class="cards">
+        {% for historic_news in user.user_news_historic.all %}
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image" style="background-image: url('{{ historic_news.image }}')"></div>
+                    <div class="card__content">
+                        <div class="card__title">{{ historic_news.title }}</div>
+                        <p class="card__text">{{ historic_news.description }}</p>
+                        <a href="{{ historic_news.url }}" class="btn btn--block card__btn">Read More</a>
+                        <button type="button" class="btn btn-warning remove-button" data-news_url="{{ historic_news.url }}">Remove</button>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <div style="text-align: center;">
+        <a href="{% url 'accounts:edit_profile' request.user.id %}" class="btn btn-primary" style="max-width: 170px;margin-bottom: 20px;">Edit Profile</a>
+    </div>
+{% endblock %}
