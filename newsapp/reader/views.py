@@ -21,10 +21,6 @@ API_KEYS = [
    "fde47eb1fd3c4768964eb3d3bd9eaae2",
    "7dfa405963a9460693136651c8006b36",
    "dbb12ae7153a417b85f1b3ea8f8bfe6e",
-   "0d349c59c2cb4d4dac3c008cb0149b09",
-   "2def9e2a6c4841518f693d780c62d6ff",
-   "9803944a12724709be189825d140c2ab",
-   "b147c9ae5a0b4b2ea438d7192a13aed5",
 ]
 
 current_key_index = 0
