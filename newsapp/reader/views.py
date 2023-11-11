@@ -23,13 +23,12 @@ API_KEYS = [
     "b147c9ae5a0b4b2ea438d7192a13aed5",
 ]
 
-current_key_index = 0
-API_KEY = API_KEYS[current_key_index]
+API_KEY = API_KEYS[0]
     
 def select_new_api_key():
     global API_KEY 
     global API_KEYS 
-    global current_key_index
+    current_key_index = API_KEYS.index(API_KEY)
     if is_rate_limited(API_KEY):
         next_key_index = (current_key_index + 1) % len(API_KEYS)
     else:
@@ -552,16 +551,19 @@ def delete_news(request):
             return JsonResponse({"success": False})
     return JsonResponse({"success": False})
 
-def bookmarks(request):
-    user = request.user
-    saved_news = user.user_saved_news.all()
-
-    context = {
-        'saved_news': saved_news
-    }
-
-    return render(request, 'bookmarks.html', context)
-
+@login_required
+def delete_historic_news(request):
+    if request.method == 'POST':
+        news_url = request.POST.get('news_url', None)
+        if news_url is None:
+            return JsonResponse({"success": False})
+        news = request.user.user_news_historic.filter(url=news_url)
+        if news.exists():
+            news.delete()
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({"success": False})
+    return JsonResponse({"success": False})
 
 
 def add_to_historic(request):

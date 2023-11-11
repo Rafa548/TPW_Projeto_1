@@ -1,2 +1,3 @@
 para executar o comando para mudar de api usar
 python manage.py change_api_key
+python3 manage.py createcachetable

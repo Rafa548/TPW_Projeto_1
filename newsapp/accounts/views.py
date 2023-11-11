@@ -9,6 +9,7 @@ from accounts.models import User, Interest
 
 
 
+
 def user_register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)

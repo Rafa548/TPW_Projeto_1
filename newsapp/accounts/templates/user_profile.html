@@ -21,13 +21,14 @@
         {% for news in user.user_saved_news.all %}
             <li class="cards__item">
                 <div class="card">
-                    <div class="card__image" style="background-image: url('{{ news.image }}')"></div>
-                    <div class="card__content">
-                        <div class="card__title">{{ news.title }}</div>
-                        <p class="card__text">{{ news.description }}</p>
-                        <a href="{{ news.url }}" class="btn btn--block card__btn">Read More</a>
-                        <button type="button" class="btn btn-warning remove-button" data-news_url="{{ news.url }}">Remove</button>
-                    </div>
+                    <a href="{{ news.url }}" class="card-link">
+                        <div class="card__image" style="background-image: url('{{ news.image }}')"></div>
+                        <div class="card__content">
+                            <div class="card__title">{{ news.title }}</div>
+                            <p class="card__text">{{ news.description }}</p>
+                        </div>
+                    </a>
+                    <button type="button" class="btn btn-warning remove-button" data-news_url="{{ news.url }}" id="button-remove">Remove</button>
                 </div>
             </li>
         {% endfor %}
@@ -38,18 +39,19 @@
         {% for historic_news in user.user_news_historic.all %}
             <li class="cards__item">
                 <div class="card">
-                    <div class="card__image" style="background-image: url('{{ historic_news.image }}')"></div>
-                    <div class="card__content">
-                        <div class="card__title">{{ historic_news.title }}</div>
-                        <p class="card__text">{{ historic_news.description }}</p>
-                        <a href="{{ historic_news.url }}" class="btn btn--block card__btn">Read More</a>
-                        <button type="button" class="btn btn-warning remove-button" data-news_url="{{ historic_news.url }}">Remove</button>
-                    </div>
+                    <a href="{{ historic_news.url }}" class="card-link">
+                        <div class="card__image" style="background-image: url('{{ historic_news.image }}')"></div>
+                        <div class="card__content">
+                            <a href="{{ historic_news.url }}" class="card-link"><div class="card__title">{{ historic_news.title }}</div></a>
+                            <p class="card__text">{{ historic_news.description }}</p>
+                        </div>
+                    </a>
+                    <button type="button" class="btn btn-warning remove-button" data-news_url="{{ historic_news.url }}" id="button-remove">Remove</button>
                 </div>
             </li>
         {% endfor %}
     </ul>
     <div style="text-align: center;">
-        <a href="{% url 'accounts:edit_profile' request.user.id %}" class="btn btn-primary" style="max-width: 170px;margin-bottom: 20px;">Edit Profile</a>
+        <a href="{% url 'accounts:edit_profile' request.user.id %}" class="btn btn-primary" id="button-edit-profile">Edit Profile</a>
     </div>
 {% endblock %}

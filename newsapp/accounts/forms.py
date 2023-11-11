@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from .models import User, Interest
+from django.core.exceptions import ValidationError
 
 
 class UserLoginForm(forms.Form):
@@ -15,6 +16,28 @@ class UserLoginForm(forms.Form):
         )
     )
 
+def validate_password(value, email, username):
+    if len(value) < 8:
+        raise ValidationError("Password must be at least 8 characters long.")
+
+    if not any(char in r'!@#$%^&*()+[]{}|;:,.<>?/`~' for char in value):
+        raise ValidationError("Password must contain at least one special character.")
+
+    if not any(char.isdigit() for char in value):
+        raise ValidationError("Password must contain at least one number.")
+
+    if not any(char.isupper() for char in value):
+        raise ValidationError("Password must contain at least one uppercase letter.")
+
+    if not any(char.islower() for char in value):
+        raise ValidationError("Password must contain at least one lowercase letter.")
+
+    email_prefix = email.split('@')[0]
+    if email_prefix in value:
+        raise ValidationError("Password cannot contain the part of your email.")
+
+    if username in value:
+        raise ValidationError("Password cannot contain a substring of your username.")
 
 class UserRegistrationForm(forms.Form):
     email = forms.EmailField(
@@ -32,6 +55,15 @@ class UserRegistrationForm(forms.Form):
             attrs={'class': 'form-control', 'placeholder': 'password'}
         )
     )
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        full_name = cleaned_data.get('full_name')
+        password = cleaned_data.get('password')
+
+        validate_password(password, email, full_name)
+
+        return cleaned_data
 
 
 class EditProfileForm(UserChangeForm):
@@ -49,22 +81,43 @@ class EditProfileForm(UserChangeForm):
         model = User
         fields = ('full_name', 'email', 'interests')
 
+    interests = forms.ModelMultipleChoiceField(
+        queryset=Interest.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
+        # Remove the password fields from the form instance
         del self.fields['password']
 
     def clean_current_password(self):
         current_password = self.cleaned_data.get('current_password')
+
         if not self.instance.check_password(current_password):
             raise forms.ValidationError("Invalid current password")
+
         return current_password
 
     def clean_new_password(self):
         new_password = self.cleaned_data.get('new_password')
         if new_password:
-            return new_password
-        return None
+            if len(new_password) < 8:
+                raise forms.ValidationError("Password must be at least 8 characters long.")
 
+            if not any(char in r'!@#$%^&*()+[]{}|;:,.<>?/`~' for char in new_password):
+                raise forms.ValidationError("Password must contain at least one special character.")
+
+            if not any(char.isdigit() for char in new_password):
+                raise forms.ValidationError("Password must contain at least one number.")
+
+            if not any(char.isupper() for char in new_password):
+                raise forms.ValidationError("Password must contain at least one uppercase letter.")
+
+            if not any(char.islower() for char in new_password):
+                raise forms.ValidationError("Password must contain at least one lowercase letter.")
+        return new_password
 
 class InterestsForm(forms.ModelForm):
     user_email = forms.EmailField(label='Your Email')

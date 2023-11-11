@@ -156,6 +156,51 @@
       line-height: 1.5;
       margin-bottom: 1.25rem;
     }
+    #button-edit-profile {
+      background-color: #005699;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      max-width: 170px;
+    }
+
+    #button-edit-profile:hover {
+      background-color: #003366; /* Darker shade on hover */
+    }
+
+    #button-update{
+        background-color: #005699;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    #button-update:hover {
+      background-color: #003366;
+    }
+
+     #button-remove {
+    background-color: #005699;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        max-width: 100px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #button-remove:hover {
+        background-color: #003366;
+    }
+
+
     
     </style>
     
@@ -301,7 +346,6 @@
                     </a>
                     <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item custom-dropdown-item" href={% url 'accounts:user_profile' request.user.id %}>Profile</a></li>
-                        <li><a class="dropdown-item custom-dropdown-item" href={% url 'bookmarks' %}>Bookmarks</a></li>
                         <li><a class="dropdown-item custom-dropdown-item" href="{% url 'accounts:user_logout' %}">Logout</a></li>
                     </ul>
                 </li>
@@ -405,6 +449,29 @@
                     success: function (response) {
                         if (response.success) {
                             // Remove the card from the DOM
+                            button.closest(".cards__item").remove();
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $(".remove-button").click(function () {
+                var button = $(this);
+                var newsUrl = button.data("news_url");
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'delete_historic_news' %}",
+                    data: {
+                        news_url: newsUrl,
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    },
+                    success: function (response) {
+                        if (response.success) {
                             button.closest(".cards__item").remove();
                         }
                     },
