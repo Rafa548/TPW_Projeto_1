@@ -45,11 +45,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'reader.apps.ReaderConfig',
     'accounts.apps.AccountsConfig',
     'crispy_forms',
+    'daphne', 
+    'channels', 
+    'chat.apps.ChatConfig',
+    'django.contrib.staticfiles',
 ]
+
+ASGI_APPLICATION = 'newsapp.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -144,6 +149,11 @@ STATIC_URL = '/static/'
 # )
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'newsapp/static')]
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 LOGIN_URL = 'accounts:user_login'
 

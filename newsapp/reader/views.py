@@ -67,7 +67,7 @@ def home(request):
     context = cache.get(cache_key)
 
     if context is None:
-        API_KEY = select_new_api_key()
+        global API_KEY
         page = request.GET.get('page', 1)
         search = request.GET.get('search', None)
         notifications = 0
@@ -76,6 +76,16 @@ def home(request):
             )
         print("url:", url)
         r = requests.get(url=url)
+        if r.status_code == 429:
+            print("changing api key")
+            API_KEY = select_new_api_key()
+            url = "https://newsapi.org/v2/top-headlines?country={}&page={}&apiKey={}".format(
+                "us",1,API_KEY
+            )
+
+            print("url:", url)
+            r = requests.get(url=url)
+
 
         default_interests = ["Technology", "Science", "Health", "Entertainment", "Sport", "Culture"]
 
@@ -114,6 +124,16 @@ def home(request):
             )
             print("url:", url)
             r = requests.get(url=url)
+            if r.status_code == 429:
+                print("changing api key")
+                API_KEY = select_new_api_key()
+                url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+                    search, "popularity", page, API_KEY
+                )
+
+                print("url:", url)
+                r = requests.get(url=url)
+
             data = r.json()
             if data["status"] != "ok":
                 return HttpResponse("<h1>Request Failed</h1>")
@@ -153,6 +173,17 @@ def home(request):
                     search, "publishedAt", page, API_KEY
                 )
                 r1 = requests.get(url=url1)
+
+                if r1.status_code == 429:
+                    print("changing api key")
+                    API_KEY = select_new_api_key()
+                    url1 = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+                        search, "publishedAt", page, API_KEY
+                    )
+
+                    print("url:", url1)
+                    r1 = requests.get(url=url1)
+
                 data1 = r1.json()
                 if data1["status"] != "ok":
                     return HttpResponse("<h1>Request Failed</h1>")
@@ -191,6 +222,17 @@ def home(request):
                 )
                 print("url:", url)
                 r = requests.get(url=url)
+
+                if r.status_code == 429:
+                    print("changing api key")
+                    API_KEY = select_new_api_key()
+                    url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&apiKey={}".format(
+                        search, "popularity", page, API_KEY
+                    )
+
+                    print("url:", url)
+                    r = requests.get(url=url)
+
                 data = r.json()
                 if data["status"] != "ok":
                     return HttpResponse("<h1>Request Failed</h1>")
@@ -218,7 +260,7 @@ def home(request):
 
 
 def search_results(request):
-    API_KEY = select_new_api_key()
+    global API_KEY
     if request.method == 'GET':
         query = request.GET.get('q', '')  # Get the search query from the request
         print("query:",query)
@@ -229,6 +271,18 @@ def search_results(request):
         )
 
         r = requests.get(url=url)
+
+        if r.status_code == 429:
+                    print("changing api key")
+                    API_KEY = select_new_api_key()
+                    url = "https://newsapi.org/v2/everything?q={}&sortBy={}&page={}&searchIn=title&apiKey={}".format(
+                        query, "popularity", npage, API_KEY
+                    )
+
+                    print("url:", url)
+                    r = requests.get(url=url)
+        
+
 
         data = r.json()
         if data["status"] != "ok":
@@ -284,7 +338,7 @@ def category(request):
     cache_key = f"category_{category}_{n_page}"
     context = cache.get(cache_key)
     if context is None:
-        API_KEY = select_new_api_key()
+        global API_KEY
         if request.method == 'GET':
             query = request.GET.get('q', '')  # Get the search query from the request
             #print("query:",query)
@@ -297,12 +351,32 @@ def category(request):
 
             r = requests.get(url=url)
 
+            if r.status_code == 429:
+                    print("changing api key")
+                    API_KEY = select_new_api_key()
+                    url = "https://newsapi.org/v2/everything?q={}&page={}&apiKey={}".format(
+                        query, npage, API_KEY
+                    )
+
+                    print("url:", url)
+                    r = requests.get(url=url)
+
             trending_url = "https://newsapi.org/v2/top-headlines?sortBy={}&country=us&page={}&apiKey={}".format(
                 "popularity", 1, API_KEY
             )
             #print("trending_url:",trending_url)
 
             r_trending = requests.get(url=trending_url)
+
+            if r_trending.status_code == 429:
+                print("changing api key")
+                API_KEY = select_new_api_key()
+                trending_url = "https://newsapi.org/v2/top-headlines?sortBy={}&country=us&page={}&apiKey={}".format(
+                    "popularity", 1, API_KEY
+                )
+
+                print("url:", trending_url)
+                r_trending = requests.get(url=trending_url)
 
             latest_url = "https://newsapi.org/v2/top-headlines?country=us&page={}&apiKey={}&sortBy={}".format(
                 1, API_KEY,"publishedAt"
@@ -311,12 +385,30 @@ def category(request):
 
             r_latest = requests.get(url=latest_url)
 
+            if r_latest.status_code == 429:
+                print("changing api key")
+                API_KEY = select_new_api_key()
+                latest_url = "https://newsapi.org/v2/top-headlines?country=us&page={}&apiKey={}&sortBy={}".format(
+                    1, API_KEY,"publishedAt"
+                )
+                print("url:", latest_url)
+                r_latest = requests.get(url=latest_url)
+
             popular_url = "https://newsapi.org/v2/everything?q={}&page={}&apiKey={}&sortBy={}".format(
                 query, 1, API_KEY,"popularity"
             )
             #print("popular_url:", popular_url)
 
             r_popular = requests.get(url=popular_url)
+
+            if r_popular.status_code == 429:
+                print("changing api key")
+                API_KEY = select_new_api_key()
+                popular_url = "https://newsapi.org/v2/everything?q={}&page={}&apiKey={}&sortBy={}".format(
+                    query, 1, API_KEY,"popularity"
+                )
+                print("url:", popular_url)
+                r_popular = requests.get(url=popular_url)
 
             data = r.json()
             if data["status"] != "ok":
