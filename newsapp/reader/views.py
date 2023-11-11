@@ -32,6 +32,8 @@ def select_new_api_key():
     global current_key_index
     if is_rate_limited(API_KEY):
         next_key_index = (current_key_index + 1) % len(API_KEYS)
+    else:
+        next_key_index = current_key_index
 
     for _ in range(len(API_KEYS)):
         next_key = API_KEYS[next_key_index]
