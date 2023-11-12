@@ -923,97 +923,94 @@
               backdrop: 'static',
               keyboard: false
           });
-      });
-      
-      $(document).ready(function () {
-      $('#saveInterestsButton').click(function () {
-          var formData = $('#interestForm').serialize();
 
-          $.ajax({
-              type: 'POST',
-              url: '{%  url "accounts:save_interests" %}',
-              data: formData,
-              success: function (data) {
-                  if (data.success) {
-                      $('#interestModal').modal('hide');
-                  }
-              }
-              });
+          $('#saveInterestsButton').click(function () {
+            var formData = $('#interestForm').serialize();
+  
+            $.ajax({
+                type: 'POST',
+                url: '{%  url "accounts:save_interests" %}',
+                data: formData,
+                success: function (data) {
+                    if (data.success) {
+                        $('#interestModal').modal('hide');
+                    }
+                }
+                });
+            });
+
+          // Initially hide the chat box
+          $("#chatBox").hide();
+
+          // Toggle the chat box when the button is clicked
+          $("#toggleChatBoxBtn").click(function() {
+              $("#chatBox").toggle();
+          });
+
+          // Close the chat box when the close button is clicked
+          $("#closeChatBoxBtn").click(function() {
+              $("#chatBox").hide();
           });
       });
-
-  </script>
-
-  <script>
-    const chatSocket = new WebSocket("ws://" + window.location.host + "/");
-    
-    chatSocket.onopen = function (e) {
-      console.log("The connection was set up successfully!");
-    };
-    
-    chatSocket.onclose = function (e) {
-      console.log("Something unexpected happened!");
-    };
-    
-    document.querySelector("#id_message_send_input").focus();
-    
-    document.querySelector("#id_message_send_input").onkeyup = function (e) {
-      if (e.keyCode == 13) {
-        document.querySelector("#id_message_send_button").click();
-      }
-    };
-    
-    document.querySelector("#id_message_send_button").onclick = function (e) {
-      var messageInput = document.querySelector("#id_message_send_input").value;
-      chatSocket.send(JSON.stringify({ message: messageInput, username: "{{request.user.full_name}}" }));
-    };
-    
-    chatSocket.onmessage = function (e) {
-      const data = JSON.parse(e.data);
       
-      var messageContainer = document.createElement("div");
-      messageContainer.classList.add("chat-message");
-  
-      var userImage = document.createElement("img");
-      userImage.src = "https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png";
-      userImage.width = 30;
-      userImage.height = 30;
-  
-      var messageText = document.createElement("div");
-      messageText.innerHTML = data.username + ": " + data.message;
-  
-      messageContainer.appendChild(userImage);
-      messageContainer.appendChild(messageText);
-  
-      document.querySelector("#id_message_send_input").value = "";
-      document.querySelector("#id_chat_item_container").appendChild(messageContainer);
-    };
+      const chatSocket = new WebSocket("ws://" + window.location.host + "/");
+    
+      chatSocket.onopen = function (e) {
+        console.log("The connection was set up successfully!");
+      };
+      
+      chatSocket.onclose = function (e) {
+        console.log("Something unexpected happened!");
+      };
+      
+      document.querySelector("#id_message_send_input").focus();
+      
+      document.querySelector("#id_message_send_input").onkeyup = function (e) {
+        if (e.keyCode == 13) {
+          document.querySelector("#id_message_send_button").click();
+        }
+      };
+      
+      document.querySelector("#id_message_send_button").onclick = function (e) {
+        var messageInput = document.querySelector("#id_message_send_input").value;
+        chatSocket.send(JSON.stringify({ message: messageInput, username: "{{request.user.full_name}}" }));
+      };
+      
+      chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        
+        var messageContainer = document.createElement("div");
+        messageContainer.classList.add("chat-message");
+    
+        var userImage = document.createElement("img");
+        userImage.src = "https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png";
+        userImage.width = 30;
+        userImage.height = 30;
+    
+        var messageText = document.createElement("div");
+        messageText.innerHTML = data.username + ": " + data.message;
+    
+        messageContainer.appendChild(userImage);
+        messageContainer.appendChild(messageText);
+    
+        document.querySelector("#id_message_send_input").value = "";
+        document.querySelector("#id_chat_item_container").appendChild(messageContainer);
+      };
 
-    $(document).ready(function() {
-      // Initially hide the chat box
-      $("#chatBox").hide();
+      function scrollToBottom() {
+        var chatContainer = $("#id_chat_item_container");
+        //console.log("Scrolling to bottom...");
+        //console.log("Scroll Height:", chatContainer[0].scrollHeight);
+        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+      }
 
-      // Toggle the chat box when the button is clicked
-      $("#toggleChatBoxBtn").click(function() {
-          $("#chatBox").toggle();
+      // Event handler for sending a message
+      $("#id_message_send_button").click(function() {
+
+          // After sending the message, scroll to the bottom
+          setTimeout(scrollToBottom, 100);
       });
 
-      // Close the chat box when the close button is clicked
-      $("#closeChatBoxBtn").click(function() {
-          $("#chatBox").hide();
-      });
-    });
-    function scrollToBottom() {
-      var chatContainer = $("#id_chat_item_container");
-      chatContainer.scrollTop(chatContainer.prop("scrollHeight"));
-    }
-
-    // Event handler for sending a message
-    $("#id_message_send_button").click(function() {
-
-        // After sending the message, scroll to the bottom
-        scrollToBottom();
-    });
   </script>
 
   {% if user.is_authenticated and not user.get_interests %}
