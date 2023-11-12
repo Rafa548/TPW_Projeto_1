@@ -539,102 +539,105 @@
     <!-- ======= Culture Category Section ======= -->
 
     {% if user.is_authenticated %}
-        {% if user_interests|length > 0 %}
-                <section class="category-section">
-                  <div class="container" data-aos="fade-up">
-                    <div class="section-header d-flex justify-content-between align-items-center mb-5">
-                      <h2>{{ user_interests.0 }}</h2>
-                      <div><a href="category.html" class="more">See All {{user_interests.0}}</a></div>
-                    </div>
-            
-                    <div class="row">
-                      <div class="col-md-9">
-                        <div class="d-lg-flex post-entry-2">
-                          <a href="{{ data_0.0.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
-                            <img src={{ data_0.0.image  }} alt="" class="img-fluid">
-                          </a>
-                          <div>
-                            <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.0.publishedat  }}</span></div>
-                            <h3><a href={{ data_0.0.url }}>{{ data_0.0.title  }}</a></h3>
-                            <p>{{ data_0.0.description }}</p>
-                            <div class="d-flex align-items-center author">
-                              <div class="name">
-                                <h3 class="m-0 p-0">{{ data_0.0.author }}</h3>
+      {% for interest, i in interest_articles.items %}
+          
+                  <section class="category-section">
+                    <div class="container" data-aos="fade-up">
+                      <div class="section-header d-flex justify-content-between align-items-center mb-5">
+                        <h2>{{ interest }}</h2>
+                        <div><a href="category.html" class="more">See All {{interest}}</a></div>
+                      </div>
+              
+                      <div class="row">
+                        <div class="col-md-9">
+              
+                          <div class="d-lg-flex post-entry-2">
+                            <a href="{{ i.0.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                              <img src={{ i.0.image  }} alt="" class="img-fluid">
+                            </a>
+                            <div>
+                              <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.0.publishedat  }}</span></div>
+                              <h3><a href={{ i.0.url }}>{{ i.0.title  }}</a></h3>
+                              <p>{{ i.0.description }}</p>
+                              <div class="d-flex align-items-center author">
+                                <div class="name">
+                                  <h3 class="m-0 p-0">{{ i.0.author }}</h3>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+              
+                          <div class="row">
+                            <div class="col-lg-4">
+                              <div class="post-entry-1 border-bottom">
+                                <a href="{{ i.1.url  }}"><img src={{ i.1.image  }}alt="" class="img-fluid"></a>
+                                <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.1.publishedat }}</span></div>
+                                <h2 class="mb-2"><a href={{ i.1.url  }}>{{ i.1.title  }}</a></h2>
+                                <span class="author mb-3 d-block">{{ i.1.author  }}</span>
+                                <p class="mb-4 d-block">{{ i.1.description  }}</p>
+                              </div>
+              
+                              <div class="post-entry-1">
+                                <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.2.publishedat }}</span></div>
+                                <h2 class="mb-2"><a href={{ i.2.url  }}>{{ i.2.title  }}</a></h2>
+                                <span class="author mb-3 d-block">{{ i.2.author  }}</span>
+                              </div>
+                            </div>
+                            <div class="col-lg-8">
+                              <div class="post-entry-1">
+                                <a href={{ i.3.url  }}><img src={{ i.3.image  }} alt="" class="img-fluid"></a>
+                                <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.3.publishedat  }}</span></div>
+                                <h2 class="mb-2"><a href={{ i.3.url  }}>{{ i.3.title  }}</a></h2>
+                                <span class="author mb-3 d-block">{{ i.3.author  }}</span>
+                                <p class="mb-4 d-block">{{ i.3.description  }}</p>
                               </div>
                             </div>
                           </div>
                         </div>
-            
-                        <div class="row">
-                          <div class="col-lg-4">
-                            <div class="post-entry-1 border-bottom">
-                              <a href="{{ data_0.1.url  }}"><img src={{ data_0.1.image  }}alt="" class="img-fluid"></a>
-                              <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.1.publishedat }}</span></div>
-                              <h2 class="mb-2"><a href={{ data_0.1.url  }}>{{ data_0.1.title  }}</a></h2>
-                              <span class="author mb-3 d-block">{{ data_0.1.author  }}</span>
-                              <p class="mb-4 d-block">{{ data_0.1.description  }}</p>
-                            </div>
-            
-                            <div class="post-entry-1">
-                              <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.2.publishedat }}</span></div>
-                              <h2 class="mb-2"><a href={{ data_0.2.url  }}>{{ data_0.2.title  }}</a></h2>
-                              <span class="author mb-3 d-block">{{ data_0.2.author  }}</span>
-                            </div>
+              
+                        <div class="col-md-3">
+                          <div class="post-entry-1 border-bottom">
+                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.4.publishedat  }}</span></div>
+                            <h2 class="mb-2"><a href={{ i.4.url  }}>{{ i.4.title  }}</a></h2>
+                            <span class="author mb-3 d-block">{{ i.4.author  }}</span>
                           </div>
-                          <div class="col-lg-8">
-                            <div class="post-entry-1">
-                              <a href={{ data_0.3.url  }}><img src={{ data_0.3.image  }} alt="" class="img-fluid"></a>
-                              <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.3.publishedat  }}</span></div>
-                              <h2 class="mb-2"><a href={{ data_0.3.url  }}>{{ data_0.3.title  }}</a></h2>
-                              <span class="author mb-3 d-block">{{ data_0.3.author  }}</span>
-                              <p class="mb-4 d-block">{{ data_0.3.description  }}</p>
-                            </div>
+              
+                          <div class="post-entry-1 border-bottom">
+                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.5.publishedat  }}</span></div>
+                            <h2 class="mb-2"><a href={{ i.5.url  }}>{{ i.5.title  }}</a></h2>
+                            <span class="author mb-3 d-block">{{ i.5.author  }}</span>
                           </div>
-                        </div>
-                      </div>
-            
-                      <div class="col-md-3">
-                        <div class="post-entry-1 border-bottom">
-                          <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.4.publishedat  }}</span></div>
-                          <h2 class="mb-2"><a href={{ data_0.4.url  }}>{{ data_0.4.title  }}</a></h2>
-                          <span class="author mb-3 d-block">{{ data_0.4.author  }}</span>
-                        </div>
-            
-                        <div class="post-entry-1 border-bottom">
-                          <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.5.publishedat  }}</span></div>
-                          <h2 class="mb-2"><a href={{ data_0.5.url  }}>{{ data_0.5.title  }}</a></h2>
-                          <span class="author mb-3 d-block">{{ data_0.5.author  }}</span>
-                        </div>
-            
-                        <div class="post-entry-1 border-bottom">
-                          <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.6.publishedat  }}</span></div>
-                          <h2 class="mb-2"><a href={{ data_0.6.url  }}>{{ data_0.6.title  }}</a></h2>
-                          <span class="author mb-3 d-block">{{ data_0.6.author  }}</span>
-                        </div>
-            
-                        <div class="post-entry-1 border-bottom">
-                          <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.7.publishedat  }}</span></div>
-                          <h2 class="mb-2"><a href={{ data_0.7.url  }}>{{ data_0.7.title  }}</a></h2>
-                          <span class="author mb-3 d-block">{{ data_0.7.author  }}</span>
-                        </div>
-            
-                        <div class="post-entry-1 border-bottom">
-                          <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.8.publishedat  }}</span></div>
-                          <h2 class="mb-2"><a href={{ data_0.8.url  }}>{{ data_0.8.title  }}</a></h2>
-                          <span class="author mb-3 d-block">{{ data_0.8.author  }}</span>
-                        </div>
-            
-                        <div class="post-entry-1 border-bottom">
-                          <div class="post-meta"><span class="date">{{user_interests.0}}</span> <span class="mx-1">&bullet;</span> <span>{{ data_0.9.publishedat  }}</span></div>
-                          <h2 class="mb-2"><a href={{ data_0.9.url  }}>{{ data_0.9.title  }}</a></h2>
-                          <span class="author mb-3 d-block">{{ data_0.9.author  }}</span>
+              
+                          <div class="post-entry-1 border-bottom">
+                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.6.publishedat  }}</span></div>
+                            <h2 class="mb-2"><a href={{ i.6.url  }}>{{ i.6.title  }}</a></h2>
+                            <span class="author mb-3 d-block">{{ i.6.author  }}</span>
+                          </div>
+              
+                          <div class="post-entry-1 border-bottom">
+                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.7.publishedat  }}</span></div>
+                            <h2 class="mb-2"><a href={{ i.7.url  }}>{{ i.7.title  }}</a></h2>
+                            <span class="author mb-3 d-block">{{ i.7.author  }}</span>
+                          </div>
+              
+                          <div class="post-entry-1 border-bottom">
+                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.8.publishedat  }}</span></div>
+                            <h2 class="mb-2"><a href={{ i.8.url  }}>{{ i.8.title  }}</a></h2>
+                            <span class="author mb-3 d-block">{{ i.8.author  }}</span>
+                          </div>
+              
+                          <div class="post-entry-1 border-bottom">
+                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.9.publishedat  }}</span></div>
+                            <h2 class="mb-2"><a href={{ i.9.url  }}>{{ i.9.title  }}</a></h2>
+                            <span class="author mb-3 d-block">{{ i.9.author  }}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </section>
-            <!-- End Culture Category Section -->
-        {% endif %}
+                  </section>
+              <!-- End Culture Category Section -->
+          
+        {% endfor %}
     {% endif %}
 
     {% if not user.is_authenticated %}

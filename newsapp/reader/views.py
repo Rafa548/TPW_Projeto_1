@@ -178,6 +178,7 @@ def home(request):
             last_news = list(last_news_titles)
 
             x = 0
+            context["interest_articles"] = {}
             for interest in interests:
                 context["user_interests"].append(interest.name)
                 search = interest.name
@@ -262,6 +263,8 @@ def home(request):
                 data = data["articles"]
 
                 context["data_" + str(x)] = []
+                context["interest_articles"][""+str(search)] = []
+
 
                 for i in data:
                     if i["title"] == "[Removed]":
@@ -282,6 +285,14 @@ def home(request):
                             "publishedat": i["publishedAt"].split("T")[0],
                         }
                     )
+                    context["interest_articles"][""+str(search)].append({
+                        "title": i["title"],
+                        "author": i["author"],
+                        "description": "" if i["description"] is None else i["description"],
+                        "url": i["url"],
+                        "image": temp_img if i["urlToImage"] is None else i["urlToImage"],
+                        "publishedat": i["publishedAt"].split("T")[0]
+                    })
                 x += 1
             print("notifications:", notifications)
         cache.set(cache_key, context, settings.CACHE_TIMEOUT)
