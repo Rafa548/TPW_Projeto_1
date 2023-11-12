@@ -45,9 +45,9 @@ class UserRegistrationForm(forms.Form):
             attrs={'class': 'form-control', 'placeholder': 'email'}
         )
     )
-    full_name = forms.CharField(
+    username = forms.CharField(
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': 'full name'}
+            attrs={'class': 'form-control', 'placeholder': 'username'}
         )
     )
     password = forms.CharField(
@@ -58,10 +58,10 @@ class UserRegistrationForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
-        full_name = cleaned_data.get('full_name')
+        username = cleaned_data.get('username')
         password = cleaned_data.get('password')
 
-        validate_password(password, email, full_name)
+        validate_password(password, email, username)
 
         return cleaned_data
 
@@ -89,7 +89,6 @@ class EditProfileForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
-        # Remove the password fields from the form instance
         del self.fields['password']
 
     def clean_current_password(self):

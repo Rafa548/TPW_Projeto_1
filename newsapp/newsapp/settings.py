@@ -34,7 +34,7 @@ CACHES = {
         'LOCATION': 'my_cache_table',
     }
 }
-CACHE_TIMEOUT = 30  # 1 hour
+CACHE_TIMEOUT = 1  # 10 mins
 
 
 # Application definition

@@ -16,7 +16,7 @@ def user_register(request):
         if form.is_valid():
             data = form.cleaned_data
             user = User.objects.create_user(
-                data['email'], data['full_name'], data['password']
+                data['email'], data['username'], data['password']
             )
             return redirect('accounts:user_login')
     else:

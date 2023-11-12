@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>ZenBlog Bootstrap Template - Index</title>
+  <title>ByteNewz</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -24,6 +24,7 @@
   <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
   <!-- Template Main CSS Files -->
   <link href="{% static 'css/variables.css' %}" rel="stylesheet">
@@ -119,6 +120,138 @@
             pointer-events: none !important;
         }
 
+        .pending {
+          background-color: red;
+          color: white;
+          border-radius: 50%;
+          padding: 5px 10px;
+          font-size: 12px;
+          position: relative;
+          top: 0px;
+          margin-left: 0px;
+      }
+      .truncate-text {
+          display: inline-block;
+          max-width: 190px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .notification-item {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+        }
+
+        .notification-image {
+          flex: 1;
+          margin-right: 10px;
+        }
+
+        .notification-image img {
+          max-width: 80px;
+          max-height: 80px;
+          border-radius: 5px;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+        }
+
+        .notification-content {
+          flex: 3;
+        }
+        .dropdown-menu {
+          max-height: 500px;
+          overflow-y: auto;
+        }
+
+        .fixed-bottom-right {
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          margin: 15px; /* Adjust margin as needed */
+          z-index: 1000; /* Ensure a higher z-index than other elements */
+        }
+      
+        .chat-container {
+          background-color: #f5f5f5; /* Light gray background */
+          border-radius: 8px;
+          box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+        }
+      
+        .chat-message {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          margin-bottom: 5px;
+        }
+      
+        .chat-message img {
+          margin-right: 10px;
+          border-radius: 50%;
+        }
+      
+        /* Style for the input and button */
+        .form-group {
+          display: flex;
+          margin-top: 10px;
+        }
+      
+        #id_message_send_input {
+          flex: 1;
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          margin-right: 8px;
+          margin-bottom: 10px;
+        }
+      
+        #id_message_send_button {
+          background-color: #007bff; /* Blue button color */
+          color: #fff; /* White text color */
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          margin-bottom: 10px;
+        }
+
+        .toggle-chat-btn {
+          position: fixed;
+          bottom: 20px;
+          right: 80px;
+          background-color: #007bff;
+          color: #fff;
+          padding: 10px;
+          border: none;
+          border-radius: 50%;
+          cursor: pointer;
+      }
+  
+      .toggle-chat-btn i {
+          font-size: 20px;
+      }
+  
+      .chat-box {
+          max-width: 400px; /* Set a maximum width for the chat box */
+          background-color: #fff;
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          overflow: hidden; /* Hide any content that overflows */
+      }
+  
+      .chat-messages-container {
+          max-height: 300px; /* Set a fixed height for the chat messages container */
+          overflow-y: auto; /* Enable vertical scrolling */
+      }
+  
+      #id_chat_item_container {
+        max-height: 300px; /* Set the desired height for the chat container */
+        overflow-y: auto;
+      }
+    
+      .chat-container {
+            flex: 0 0 auto;
+      }
+
     </style>
 </head>
 
@@ -173,78 +306,34 @@
         
       </div>
     <!-- Notification bell -->
-    <style>
-      .pending {
-          background-color: red;
-          color: white;
-          border-radius: 50%;
-          padding: 5px 10px;
-          font-size: 12px;
-          position: relative;
-          top: 0px;
-          margin-left: 0px;
-      }
-      .truncate-text {
-          display: inline-block;
-          max-width: 190px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .notification-item {
-          display: flex;
-          align-items: center;
-          padding: 10px;
-        }
-
-        .notification-image {
-          flex: 1;
-          margin-right: 10px;
-        }
-
-        .notification-image img {
-          max-width: 80px;
-          max-height: 80px;
-          border-radius: 5px;
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
-        }
-
-        .notification-content {
-          flex: 3;
-        }
-        .dropdown-menu {
-          max-height: 500px;
-          overflow-y: auto;
-        }
-  </style>
-  {% if user.is_authenticated %}
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        {% if notifications == 0 %}
-          <span class="bi-bell"></span>
-        {% else %}
-          <span class="pending">{{ notifications }}</span>
-          <span class="bi-bell"></span>
-        {% endif %}
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        {% for notification in notifications_news %}
-        <li>
-          <a class="dropdown-item" href="{{ notification.url }}">
-            <div class="notification-item">
-              <div class="notification-image">
-                <img src="{{ notification.image }}" alt="{{ notification.title }}">
+    {% if user.is_authenticated %}
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if notifications == 0 %}
+            <span class="bi-bell"></span>
+          {% else %}
+            <span class="pending">{{ notifications }}</span>
+            <span class="bi-bell"></span>
+          {% endif %}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          {% for notification in notifications_news %}
+          <li>
+            <a class="dropdown-item" href="{{ notification.url }}">
+              <div class="notification-item">
+                <div class="notification-image">
+                  <img src="{{ notification.image }}" alt="{{ notification.title }}">
+                </div>
+                <div class="notification-content">
+                  <span class="truncate-text">{{ notification.title }}</span>
+                </div>
               </div>
-              <div class="notification-content">
-                <span class="truncate-text">{{ notification.title }}</span>
-              </div>
-            </div>
-          </a>
-        </li>
-      {% endfor %}
-      </ul>
-  </div>
-  {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
     </div>
 
   </header><!-- End Header -->
@@ -312,135 +401,33 @@
         </div>
     </section><!-- End Hero Slider Section -->
 
-    <!-- ======= Chat Section ======= -->
+    <!-- ======= Chat Section ======= -->    
+    <div id="toggleChatBoxBtn" class="toggle-chat-btn">
+      <i class="fas fa-comment"></i>
+    </div>
 
-    <style>
-      /* Add some custom styles for positioning */
-      .fixed-bottom-right {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        margin: 15px; /* Adjust margin as needed */
-        z-index: 1000; /* Ensure a higher z-index than other elements */
-      }
-    
-      /* Style for each chat message */
-      .chat-container {
-        background-color: #f5f5f5; /* Light gray background */
-        border-radius: 8px;
-        overflow-y: auto; /* Make the container scrollable */
-        max-height: 300px; /* Set a fixed height for the container */
-        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-      }
-    
-      .chat-message {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        margin-bottom: 10px;
-      }
-    
-      .chat-message img {
-        margin-right: 10px;
-        border-radius: 50%;
-      }
-    
-      /* Style for the input and button */
-      .form-group {
-        display: flex;
-        margin-top: 10px;
-      }
-    
-      #id_message_send_input {
-        flex: 1;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        margin-right: 8px;
-      }
-    
-      #id_message_send_button {
-        background-color: #007bff; /* Blue button color */
-        color: #fff; /* White text color */
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-    </style>
-    
-    <div class="fixed-bottom-right">
+    <div class="fixed-bottom-right" id="chatBox">
       <div class="container d-flex justify-content-center chat-container">
-        <div>
-          
-          <div class="d-flex flex-column p-3" id="id_chat_item_container">
-            <!-- This is where chat messages will be displayed -->
+          <div id="closeChatBoxBtn" class="close-chat-btn">
+              <i class="fas fa-times"></i>
           </div>
-          <div class="form-group px-3">
-            {% if user.is_authenticated %}
-            <input type="text" id="id_message_send_input" placeholder="Type your message..." />
-            <button type="submit" id="id_message_send_button">Send</button>
-            {% else %}
-            <input type="text" id="id_message_send_input" placeholder="Login to chat..." disabled/>
-            <button type="submit" id="id_message_send_button" disabled>Send</button>
-            {% endif %}
+          <div>
+              <div class="d-flex flex-column p-3" id="id_chat_item_container">
+                  <!-- This is where chat messages will be displayed -->
+              </div>
+              <div class="form-group px-3">
+                  {% if user.is_authenticated %}
+                  <input type="text" id="id_message_send_input" placeholder="Type your message..." />
+                  <button type="submit" id="id_message_send_button">Send</button>
+                  {% else %}
+                        <input type="text" class="form-control" id="id_message_send_input" placeholder="Login to chat..." disabled />
+                        <button type="submit" class="btn btn-primary" id="id_message_send_button" disabled>Send</button>
+                  {% endif %}
+              </div>
           </div>
-        </div>
       </div>
     </div>
-    
-    <script>
-      const chatSocket = new WebSocket("ws://" + window.location.host + "/");
-      
-      chatSocket.onopen = function (e) {
-        console.log("The connection was set up successfully!");
-      };
-      
-      chatSocket.onclose = function (e) {
-        console.log("Something unexpected happened!");
-      };
-      
-      document.querySelector("#id_message_send_input").focus();
-      
-      document.querySelector("#id_message_send_input").onkeyup = function (e) {
-        if (e.keyCode == 13) {
-          document.querySelector("#id_message_send_button").click();
-        }
-      };
-      
-      document.querySelector("#id_message_send_button").onclick = function (e) {
-        var messageInput = document.querySelector("#id_message_send_input").value;
-        chatSocket.send(JSON.stringify({ message: messageInput, username: "{{request.user.full_name}}" }));
-      };
-      
-      chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        
-        var messageContainer = document.createElement("div");
-        messageContainer.classList.add("chat-message");
-    
-        var userImage = document.createElement("img");
-        userImage.src = "https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png";
-        userImage.width = 30;
-        userImage.height = 30;
-    
-        var messageText = document.createElement("div");
-        messageText.innerHTML = data.username + ": " + data.message;
-    
-        messageContainer.appendChild(userImage);
-        messageContainer.appendChild(messageText);
-    
-        document.querySelector("#id_message_send_input").value = "";
-        document.querySelector("#id_chat_item_container").appendChild(messageContainer);
-      };
-    </script>
-    
-    
-    
-    
     <!-- ======= End Chat Section ======= -->
-    
-
     <!-- ======= Post Grid Section ======= -->
     <section id="posts" class="posts">
       <div class="container" data-aos="fade-up">
@@ -562,7 +549,6 @@
             
                     <div class="row">
                       <div class="col-md-9">
-            
                         <div class="d-lg-flex post-entry-2">
                           <a href="{{ data_0.0.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
                             <img src={{ data_0.0.image  }} alt="" class="img-fluid">
@@ -747,7 +733,7 @@
             </div>
           </section>
           <!-- End Culture Category Section -->
-          <!-- ======= Business Category Section ======= -->
+          <!-- ======= Technology Category Section ======= -->
           <section class="category-section">
             <div class="container" data-aos="fade-up">
 
@@ -843,128 +829,12 @@
               </div>
             </div>
           </section><!-- End Technology Category Section -->
-          <!-- ======= Lifestyle Category Section ======= -->
-          <section class="category-section">
-            <div class="container" data-aos="fade-up">
-
-              <div class="section-header d-flex justify-content-between align-items-center mb-5">
-                <h2>Lifestyle</h2>
-                <div><a href="category.html" class="more">See All Lifestyle</a></div>
-              </div>
-
-              <div class="row g-5">
-                <div class="col-lg-4">
-                  <div class="post-entry-1 lg">
-                    <a href="single-post.html"><img src="static/img/post-landscape-8.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2><a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-                    <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus exercitationem? Nihil tempore odit ab minus eveniet praesentium, similique blanditiis molestiae ut saepe perspiciatis officia nemo, eos quae cumque. Accusamus fugiat architecto rerum animi atque eveniet, quo, praesentium dignissimos</p>
-
-                    <div class="d-flex align-items-center author">
-                      <div class="photo"><img src="static/img/person-7.jpg" alt="" class="img-fluid"></div>
-                      <div class="name">
-                        <h3 class="m-0 p-0">Esther Howard</h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                  </div>
-
-                  <div class="post-entry-1">
-                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                  </div>
-
-                </div>
-
-                <div class="col-lg-8">
-                  <div class="row g-5">
-                    <div class="col-lg-4 border-start custom-border">
-                      <div class="post-entry-1">
-                        <a href="single-post.html"><img src="static/img/post-landscape-6.jpg" alt="" class="img-fluid"></a>
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2><a href="single-post.html">Let’s Get Back to Work, New York</a></h2>
-                      </div>
-                      <div class="post-entry-1">
-                        <a href="single-post.html"><img src="static/img/post-landscape-5.jpg" alt="" class="img-fluid"></a>
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 17th '22</span></div>
-                        <h2><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                      </div>
-                      <div class="post-entry-1">
-                        <a href="single-post.html"><img src="static/img/post-landscape-4.jpg" alt="" class="img-fluid"></a>
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Mar 15th '22</span></div>
-                        <h2><a href="single-post.html">Why Craigslist Tampa Is One of The Most Interesting Places On the Web?</a></h2>
-                      </div>
-                    </div>
-                    <div class="col-lg-4 border-start custom-border">
-                      <div class="post-entry-1">
-                        <a href="single-post.html"><img src="static/img/post-landscape-3.jpg" alt="" class="img-fluid"></a>
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2><a href="single-post.html">6 Easy Steps To Create Your Own Cute Merch For Instagram</a></h2>
-                      </div>
-                      <div class="post-entry-1">
-                        <a href="single-post.html"><img src="static/img/post-landscape-2.jpg" alt="" class="img-fluid"></a>
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Mar 1st '22</span></div>
-                        <h2><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                      </div>
-                      <div class="post-entry-1">
-                        <a href="single-post.html"><img src="static/img/post-landscape-1.jpg" alt="" class="img-fluid"></a>
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-
-                      <div class="post-entry-1 border-bottom">
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                        <span class="author mb-3 d-block">Jenny Wilson</span>
-                      </div>
-
-                      <div class="post-entry-1 border-bottom">
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2 class="mb-2"><a href="single-post.html">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</a></h2>
-                        <span class="author mb-3 d-block">Jenny Wilson</span>
-                      </div>
-
-                      <div class="post-entry-1 border-bottom">
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2 class="mb-2"><a href="single-post.html">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
-                        <span class="author mb-3 d-block">Jenny Wilson</span>
-                      </div>
-
-                      <div class="post-entry-1 border-bottom">
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2 class="mb-2"><a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
-                        <span class="author mb-3 d-block">Jenny Wilson</span>
-                      </div>
-
-                      <div class="post-entry-1 border-bottom">
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
-                        <span class="author mb-3 d-block">Jenny Wilson</span>
-                      </div>
-
-                      <div class="post-entry-1 border-bottom">
-                        <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                        <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                        <span class="author mb-3 d-block">Jenny Wilson</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> 
-            </div>
+          
           {% endif %}
             <button type="button" id="modal_btn" class="btn btn-primary" style="display: none;"  data-bs-toggle="modal" data-bs-target="#interestModal">
               Choose Interests (Modal invisible button) 
             </button>
-          </section><!-- End Lifestyle Category Section -->
+          </section><!-- End Entertainment Category Section -->
 
   </main>
   <!-- End #main -->
@@ -1018,72 +888,138 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Template Main JS File -->
   <script src={%  static '/js/main.js' %}></script>
-    <script>
-        var searchInput = document.getElementById("search-input");
-        var searchForm = document.getElementById("search-form");
+  <script>
+      var searchInput = document.getElementById("search-input");
+      var searchForm = document.getElementById("search-form");
+  
+      searchInput.addEventListener("keyup", function(event) {
+          if (event.key === "Enter") {
+              searchForm.submit();
+          }
+      });
+
+      function toggleDropdown() {
+          var dropdownMenu = document.getElementById("dropdown-menu");
+          dropdownMenu.classList.toggle("show");
+      }
+
+      window.onclick = function(event) {
+          if (!event.target.matches('.profile-icon')) {
+              var dropdowns = document.getElementsByClassName("dropdown-content");
+              for (var i = 0; i < dropdowns.length; i++) {
+                  var openDropdown = dropdowns[i];
+                  if (openDropdown.classList.contains('show')) {
+                      openDropdown.classList.remove('show');
+                  }
+              }
+          }
+      }
+      
+      $(document).ready(function () {
+          $('#interestModal').modal({
+              backdrop: 'static',
+              keyboard: false
+          });
+      });
+      
+      $(document).ready(function () {
+      $('#saveInterestsButton').click(function () {
+          var formData = $('#interestForm').serialize();
+
+          $.ajax({
+              type: 'POST',
+              url: '{%  url "accounts:save_interests" %}',
+              data: formData,
+              success: function (data) {
+                  if (data.success) {
+                      $('#interestModal').modal('hide');
+                  }
+              }
+              });
+          });
+      });
+
+  </script>
+
+  <script>
+    const chatSocket = new WebSocket("ws://" + window.location.host + "/");
     
-        searchInput.addEventListener("keyup", function(event) {
-            if (event.key === "Enter") {
-                searchForm.submit();
-            }
-        });
+    chatSocket.onopen = function (e) {
+      console.log("The connection was set up successfully!");
+    };
+    
+    chatSocket.onclose = function (e) {
+      console.log("Something unexpected happened!");
+    };
+    
+    document.querySelector("#id_message_send_input").focus();
+    
+    document.querySelector("#id_message_send_input").onkeyup = function (e) {
+      if (e.keyCode == 13) {
+        document.querySelector("#id_message_send_button").click();
+      }
+    };
+    
+    document.querySelector("#id_message_send_button").onclick = function (e) {
+      var messageInput = document.querySelector("#id_message_send_input").value;
+      chatSocket.send(JSON.stringify({ message: messageInput, username: "{{request.user.full_name}}" }));
+    };
+    
+    chatSocket.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      
+      var messageContainer = document.createElement("div");
+      messageContainer.classList.add("chat-message");
+  
+      var userImage = document.createElement("img");
+      userImage.src = "https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png";
+      userImage.width = 30;
+      userImage.height = 30;
+  
+      var messageText = document.createElement("div");
+      messageText.innerHTML = data.username + ": " + data.message;
+  
+      messageContainer.appendChild(userImage);
+      messageContainer.appendChild(messageText);
+  
+      document.querySelector("#id_message_send_input").value = "";
+      document.querySelector("#id_chat_item_container").appendChild(messageContainer);
+    };
 
-        function toggleDropdown() {
-            var dropdownMenu = document.getElementById("dropdown-menu");
-            dropdownMenu.classList.toggle("show");
-        }
+    $(document).ready(function() {
+      // Initially hide the chat box
+      $("#chatBox").hide();
 
-        window.onclick = function(event) {
-            if (!event.target.matches('.profile-icon')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
-            }
-        }
-        
-        $(document).ready(function () {
-            $('#interestModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-        });
-        
-        $(document).ready(function () {
-        $('#saveInterestsButton').click(function () {
-            var formData = $('#interestForm').serialize();
+      // Toggle the chat box when the button is clicked
+      $("#toggleChatBoxBtn").click(function() {
+          $("#chatBox").toggle();
+      });
 
-            $.ajax({
-                type: 'POST',
-                url: '{%  url "accounts:save_interests" %}',
-                data: formData,
-                success: function (data) {
-                    // Handle the response here, e.g., update the modal content or close the modal
-                    if (data.success) {
-                        // Interests saved successfully
-                        // You can update modal content or display a success message
-                        // For example, you can hide the modal
-                        $('#interestModal').modal('hide');
-                    } else {
-                        // Handle errors if needed
-                    }
-                }
-                });
-            });
-        });
+      // Close the chat box when the close button is clicked
+      $("#closeChatBoxBtn").click(function() {
+          $("#chatBox").hide();
+      });
+    });
+    function scrollToBottom() {
+      var chatContainer = $("#id_chat_item_container");
+      chatContainer.scrollTop(chatContainer.prop("scrollHeight"));
+    }
 
+    // Event handler for sending a message
+    $("#id_message_send_button").click(function() {
+
+        // After sending the message, scroll to the bottom
+        scrollToBottom();
+    });
+  </script>
+
+  {% if user.is_authenticated and not user.get_interests %}
+    <script>
+      $(document).ready(function () {
+        $('#modal_btn').click();  // Simulate a click on the hidden button to open the modal
+      });
     </script>
-
-    {% if user.is_authenticated and not user.get_interests %}
-      <script>
-        $(document).ready(function () {
-          $('#modal_btn').click();  // Simulate a click on the hidden button to open the modal
-        });
-      </script>
-    {% endif %}
+  {% endif %}
 
 </body>
 
