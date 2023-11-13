@@ -180,6 +180,7 @@ def home(request):
             x = 0
             context["interest_articles"] = {}
             for interest in interests:
+
                 context["user_interests"].append(interest.name)
                 search = interest.name
 
@@ -204,6 +205,8 @@ def home(request):
                 data1 = data1["articles"]
 
                 for i in data1:
+                    if i["title"] is None:
+                        continue
                     if i["title"] == "[Removed]":
                         continue
                     if i["author"] is None:

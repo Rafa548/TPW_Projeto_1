@@ -34,7 +34,7 @@ CACHES = {
         'LOCATION': 'my_cache_table',
     }
 }
-CACHE_TIMEOUT = 1  # 10 mins
+CACHE_TIMEOUT = 600  # 10 mins
 
 
 # Application definition
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'channels', 
     'chat.apps.ChatConfig',
     'django.contrib.staticfiles',
+    'axes',
 ]
 
 ASGI_APPLICATION = 'newsapp.asgi.application'
@@ -64,8 +65,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
+AXES_FAILURE_LIMIT = 3  # Lock out after 3 login attempts
+AXES_LOCK_OUT_AT_FAILURE = True  # Automatically lock out users
+AXES_USE_USER_AGENT = True  # Include user agent in tracking
+AXES_COOLOFF_TIME = 1  # Lockout for 1 minute
 
 ROOT_URLCONF = 'newsapp.urls'
 

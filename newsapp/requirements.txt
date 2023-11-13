@@ -9,3 +9,4 @@ Pillow==9.0.0
 sqlparse==0.4.2
 daphne==4.0.0
 channels==4.0.0
+django-axes==6.1.1

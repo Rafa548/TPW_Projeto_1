@@ -107,7 +107,7 @@
             display: block !important;
             transition: color 0.3s !important;
             margin: 0;
-            padding-top: 5px; /* Adjust the top padding as needed */
+            padding-top: 5px;
             padding-bottom: 5px;
         }
     
@@ -434,10 +434,11 @@
         <div class="row g-5">
           <div class="col-lg-4">
             <div class="post-entry-1 lg">
-              <a href="{{ data_Sport.0.url }}"><img src={{ data_Sport.0.image  }} alt="" class="img-fluid"></a>
+                <a href="{{ data_Sport.0.url }}"><a href="{% url 'add_to_historic' %}?url={{ data_Sport.0.url }}&title={{ data_Sport.0.title }}&description={{ data_Sport.0.description }}&image={{ data_Sport.0.image }}&publishedat={{ data_Sport.0.publishedat }}"><img src={{ data_Sport.0.image  }} alt="" class="img-fluid"></a></a>
               <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ data_Sport.0.publishedat }}</span></div>
               <h2><a href={{ data_Sport.0.url }}>{{data_Sport.0.title}}</a></h2>
               <p class="mb-4 d-block">{{ data_Sport.0.description }}</p>
+                </a>
 
               <div class="d-flex align-items-center author">
                 <div class="photo"><img src="static/img/person-1.jpg" alt="" class="img-fluid"></div>
@@ -451,34 +452,34 @@
             <div class="row g-5">
               <div class="col-lg-4 border-start custom-border">
                 <div class="post-entry-1">
-                  <a href={{ data_Technology.0.url }}><img src={{ data_Technology.0.image }} alt="" class="img-fluid"></a>
+                    <a href={{ data_Technology.0.url }}> <a href="{% url 'add_to_historic' %}?url={{ data_Technology.0.url }}&title={{ data_Technology.0.title }}&description={{ data_Technology.0.description }}&image={{ data_Technology.0.image }}&publishedat={{ data_Technology.0.publishedat }}"><img src={{ data_Technology.0.image }} alt="" class="img-fluid"></a></a>
                   <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>{{ data_Technology.0.publishedat }}</span></div>
                   <h2><a href={{ data_Technology.0.url }}>{{data_Technology.0.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href={{ data_Science.0.url }}><img src={{ data_Science.0.image }} alt="" class="img-fluid"></a>
+                    <a href={{ data_Science.0.url }}> <a href="{% url 'add_to_historic' %}?url={{ data_Science.0.url }}&title={{ data_Science.0.title }}&description={{ data_Science.0.description }}&image={{ data_Science.0.image }}&publishedat={{ data_Science.0.publishedat }}"><img src={{ data_Science.0.image }} alt="" class="img-fluid"></a></a>
                   <div class="post-meta"><span class="date">Science</span> <span class="mx-1">&bullet;</span> <span>{{ data_Science.0.publishedat }}</span></div>
                   <h2><a href={{ data_Science.0.url }}>{{data_Science.0.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href={{ data_Health.0.url }}><img src={{ data_Health.0.image }} alt="" class="img-fluid"></a>
+                    <a href={{ data_Health.0.url }}><a href="{% url 'add_to_historic' %}?url={{ data_Health.0.url }}&title={{ data_Health.0.title }}&description={{ data_Health.0.description }}&image={{ data_Health.0.image }}&publishedat={{ data_Health.0.publishedat }}"><img src={{ data_Health.0.image }} alt="" class="img-fluid"></a></a>
                   <div class="post-meta"><span class="date">Health</span> <span class="mx-1">&bullet;</span> <span>{{ data_Health.0.publishedat }}</span></div>
                   <h2><a href={{ data_Health.0.url }}>{{data_Health.0.title}}</a></h2>
                 </div>
               </div>
               <div class="col-lg-4 border-start custom-border">
                 <div class="post-entry-1">
-                  <a href={{ data_Culture.0.url }}><img src={{ data_Culture.0.image }} alt="" class="img-fluid"></a>
+                    <a href={{ data_Culture.0.url }}> <a href="{% url 'add_to_historic' %}?url={{ data_Culture.0.url }}&title={{ data_Culture.0.title }}&description={{ data_Culture.0.description }}&image={{ data_Culture.0.image }}&publishedat={{ data_Culture.0.publishedat }}"><img src={{ data_Culture.0.image }} alt="" class="img-fluid"></a></a>
                   <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.0.publishedat }}</span></div>
                   <h2><a href={{ data_Culture.0.url }}>{{data_Culture.0.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href={{ data_Sport.1.url }}><img src={{ data_Sport.1.image }} alt="" class="img-fluid"></a>
+                    <a href={{ data_Sport.1.url }}><a href="{% url 'add_to_historic' %}?url={{ data_Sport.0.url }}&title={{ data_Sport.0.title }}&description={{ data_Sport.0.description }}&image={{ data_Sport.0.image }}&publishedat={{ data_Sport.0.publishedat }}"><img src={{ data_Sport.1.image }} alt="" class="img-fluid"></a></a>
                   <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>{{ data_Sport.1.publishedat }}</span></div>
                   <h2><a href={{ data_Sport.1.url }}>{{data_Sport.1.title}}</a></h2>
                 </div>
                 <div class="post-entry-1">
-                  <a href={{ data_Entertainment.0.url }}><img src={{ data_Entertainment.0.image }} alt="" class="img-fluid"></a>
+                    <a href={{ data_Entertainment.0.url }}> <a href="{% url 'add_to_historic' %}?url={{ data_Entertainment.0.url }}&title={{ data_Entertainment.0.title }}&description={{ data_Entertainment.0.description }}&image={{ data_Entertainment.0.image }}&publishedat={{ data_Entertainment.0.publishedat }}"><img src={{ data_Entertainment.0.image }} alt="" class="img-fluid"></a></a>
                   <div class="post-meta"><span class="date">Entertainment</span> <span class="mx-1">&bullet;</span> <span>{{ data_Entertainment.0.publishedat }}</span></div>
                   <h2><a href={{ data_Entertainment.0.url }}>{{data_Entertainment.0.title}}</a></h2>
                 </div>
@@ -491,39 +492,39 @@
                   <h3>Trending</h3>
                   <ul class="trending-post">
                     <li>
-                      <a href={{ data.0.url }}>
+                      <a href={{ data.0.url }}> <a href="{% url 'add_to_historic' %}?url={{ data.0.url }}&title={{ data.0.title }}&description={{ data.0.description }}&image={{ data.0.image }}&publishedat={{ data.0.publishedat }}">
                         <span class="number">1</span>
                         <h3>{{ data.0.title }}</h3>
                         <span class="author">{{ data.0.author }}</span>
-                      </a>
+                      </a></a>
                     </li>
                     <li>
-                      <a href={{ data.1.url }}>
+                      <a href={{ data.1.url }}> <a href="{% url 'add_to_historic' %}?url={{ data.1.url }}&title={{ data.1.title }}&description={{ data.1.description }}&image={{ data.1.image }}&publishedat={{ data.1.publishedat }}">
                         <span class="number">2</span>
                         <h3>{{ data.1.title }}</h3>
                         <span class="author">{{ data.1.author }}</span>
-                      </a>
+                      </a></a>
                     </li>
                     <li>
-                      <a href={{ data.2.url }}>
+                      <a href={{ data.2.url }}><a href="{% url 'add_to_historic' %}?url={{ data.2.url }}&title={{ data.2.title }}&description={{ data.2.description }}&image={{ data.2.image }}&publishedat={{ data.2.publishedat }}">
                         <span class="number">3</span>
                         <h3>{{ data.2.title }}</h3>
                         <span class="author">{{ data.2.author }}</span>
-                      </a>
+                      </a></a>
                     </li>
                     <li>
-                      <a href={{ data.3.url }}>
+                      <a href={{ data.3.url }}><a href="{% url 'add_to_historic' %}?url={{ data.3.url }}&title={{ data.3.title }}&description={{ data.3.description }}&image={{ data.3.image }}&publishedat={{ data.3.publishedat }}">
                         <span class="number">4</span>
                         <h3>{{ data.3.title }}</h3>
                         <span class="author">{{ data.3.author }}</span>
-                      </a>
+                      </a></a>
                     </li>
                     <li>
-                      <a href={{ data.4.url }}>
+                      <a href={{ data.4.url }}> <a href="{% url 'add_to_historic' %}?url={{ data.4.url }}&title={{ data.4.title }}&description={{ data.4.description }}&image={{ data.4.image }}&publishedat={{ data.4.publishedat }}">
                         <span class="number">5</span>
                         <h3>{{ data.4.title }}</h3>
                         <span class="author">{{ data.4.author }}</span>
-                      </a>
+                      </a></a>
                     </li>
                   </ul>
                 </div>
@@ -540,14 +541,13 @@
 
     {% if user.is_authenticated %}
       {% for interest, i in interest_articles.items %}
-          
                   <section class="category-section">
                     <div class="container" data-aos="fade-up">
                       <div class="section-header d-flex justify-content-between align-items-center mb-5">
                         <h2>{{ interest }}</h2>
-                        <div><a href="category.html" class="more">See All {{interest}}</a></div>
+                        <div>
+                            <a href="{% url 'category' %}?q={{ interest }}" class="more">See All {{ interest }}</a></div>
                       </div>
-              
                       <div class="row">
                         <div class="col-md-9">
               
@@ -557,7 +557,7 @@
                             </a>
                             <div>
                               <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.0.publishedat  }}</span></div>
-                              <h3><a href={{ i.0.url }}>{{ i.0.title  }}</a></h3>
+                                <h3><a href="{{ i.0.url }}">{{ i.0.title }}<a href="{% url 'add_to_historic' %}?url={{ i.0.url }}&title={{ i.0.title }}&description={{ i.0.description }}&image={{ i.0.image }}&publishedat={{ i.0.publishedat }}"></a></a></h3>
                               <p>{{ i.0.description }}</p>
                               <div class="d-flex align-items-center author">
                                 <div class="name">
@@ -570,7 +570,7 @@
                           <div class="row">
                             <div class="col-lg-4">
                               <div class="post-entry-1 border-bottom">
-                                <a href="{{ i.1.url  }}"><img src={{ i.1.image  }}alt="" class="img-fluid"></a>
+                                  <a href="{{ i.1.url  }}"><a href="{% url 'add_to_historic' %}?url={{ i.1.url }}&title={{ i.1.title }}&description={{ i.1.description }}&image={{ i.1.image }}&publishedat={{ i.1.publishedat }}"><img src={{ i.1.image  }}alt="" class="img-fluid"></a></a>
                                 <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.1.publishedat }}</span></div>
                                 <h2 class="mb-2"><a href={{ i.1.url  }}>{{ i.1.title  }}</a></h2>
                                 <span class="author mb-3 d-block">{{ i.1.author  }}</span>
@@ -579,13 +579,13 @@
               
                               <div class="post-entry-1">
                                 <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.2.publishedat }}</span></div>
-                                <h2 class="mb-2"><a href={{ i.2.url  }}>{{ i.2.title  }}</a></h2>
+                                  <h2 class="mb-2"><a href={{ i.2.url  }}><a href="{% url 'add_to_historic' %}?url={{ i.2.url }}&title={{ i.2.title }}&description={{ i.2.description }}&image={{ i.2.image }}&publishedat={{ i.2.publishedat }}">{{ i.2.title  }}</a></a></h2>
                                 <span class="author mb-3 d-block">{{ i.2.author  }}</span>
                               </div>
                             </div>
                             <div class="col-lg-8">
                               <div class="post-entry-1">
-                                <a href={{ i.3.url  }}><img src={{ i.3.image  }} alt="" class="img-fluid"></a>
+                                <a href={{ i.3.url  }}><a href="{% url 'add_to_historic' %}?url={{ i.3.url }}&title={{ i.3.title }}&description={{ i.3.description }}&image={{ i.3.image }}&publishedat={{ i.3.publishedat }}"><img src={{ i.3.image  }} alt="" class="img-fluid"></a></a>
                                 <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.3.publishedat  }}</span></div>
                                 <h2 class="mb-2"><a href={{ i.3.url  }}>{{ i.3.title  }}</a></h2>
                                 <span class="author mb-3 d-block">{{ i.3.author  }}</span>
@@ -594,43 +594,66 @@
                             </div>
                           </div>
                         </div>
-              
                         <div class="col-md-3">
                           <div class="post-entry-1 border-bottom">
                             <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.4.publishedat  }}</span></div>
-                            <h2 class="mb-2"><a href={{ i.4.url  }}>{{ i.4.title  }}</a></h2>
+                              <h2 class="mb-2"><a href={{ i.4.url  }}><a href="{% url 'add_to_historic' %}?url={{ i.4.url }}&title={{ i.4.title }}&description={{ i.4.description }}&image={{ i.4.image }}&publishedat={{ i.4.publishedat }}">{{ i.4.title  }}</a></a></h2>
                             <span class="author mb-3 d-block">{{ i.4.author  }}</span>
                           </div>
               
                           <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.5.publishedat  }}</span></div>
-                            <h2 class="mb-2"><a href={{ i.5.url  }}>{{ i.5.title  }}</a></h2>
-                            <span class="author mb-3 d-block">{{ i.5.author  }}</span>
-                          </div>
-              
-                          <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.6.publishedat  }}</span></div>
-                            <h2 class="mb-2"><a href={{ i.6.url  }}>{{ i.6.title  }}</a></h2>
-                            <span class="author mb-3 d-block">{{ i.6.author  }}</span>
-                          </div>
-              
-                          <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.7.publishedat  }}</span></div>
-                            <h2 class="mb-2"><a href={{ i.7.url  }}>{{ i.7.title  }}</a></h2>
-                            <span class="author mb-3 d-block">{{ i.7.author  }}</span>
-                          </div>
-              
-                          <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.8.publishedat  }}</span></div>
-                            <h2 class="mb-2"><a href={{ i.8.url  }}>{{ i.8.title  }}</a></h2>
-                            <span class="author mb-3 d-block">{{ i.8.author  }}</span>
-                          </div>
-              
-                          <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">{{interest}}</span> <span class="mx-1">&bullet;</span> <span>{{ i.9.publishedat  }}</span></div>
-                            <h2 class="mb-2"><a href={{ i.9.url  }}>{{ i.9.title  }}</a></h2>
-                            <span class="author mb-3 d-block">{{ i.9.author  }}</span>
-                          </div>
+                            <div class="post-meta">
+                                <span class="date">{{ interest }}</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>{{ i.5.publishedat }}</span>
+                            </div>
+                              <h2 class="mb-2"><a href="{{ i.5.url }}"> <a href="{% url 'add_to_historic' %}?url={{ i.5.url }}&title={{ i.5.title }}&description={{ i.5.description }}&image={{ i.5.image }}&publishedat={{ i.5.publishedat }}">{{ i.5.title }}</a></a></h2>
+                            <span class="author mb-3 d-block">{{ i.5.author }}</span>
+                        </div>
+                
+                        <!-- Bloco 6 -->
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">{{ interest }}</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>{{ i.6.publishedat }}</span>
+                            </div>
+                            <h2 class="mb-2"><a href="{{ i.6.url }}"><a href="{% url 'add_to_historic' %}?url={{ i.6.url }}&title={{ i.6.title }}&description={{ i.6.description }}&image={{ i.6.image }}&publishedat={{ i.6.publishedat }}">{{ i.6.title }}</a></a></h2>
+                            <span class="author mb-3 d-block">{{ i.6.author }}</span>
+                        </div>
+                
+                        <!-- Bloco 7 -->
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">{{ interest }}</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>{{ i.7.publishedat }}</span>
+                            </div>
+                            <h2 class="mb-2"><a href="{{ i.7.url }}"> <a href="{% url 'add_to_historic' %}?url={{ i.7.url }}&title={{ i.7.title }}&description={{ i.7.description }}&image={{ i.7.image }}&publishedat={{ i.7.publishedat }}">{{ i.7.title }}</a></a></h2>
+                            <span class="author mb-3 d-block">{{ i.7.author }}</span>
+                        </div>
+                
+                        <!-- Bloco 8 -->
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">{{ interest }}</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>{{ i.8.publishedat }}</span>
+                            </div>
+                            <h2 class="mb-2"><a href="{{ i.8.url }}"><a href="{% url 'add_to_historic' %}?url={{ i.8.url }}&title={{ i.8.title }}&description={{ i.8.description }}&image={{ i.8.image }}&publishedat={{ i.8.publishedat }}">{{ i.8.title }}</a></a></h2>
+                            <span class="author mb-3 d-block">{{ i.8.author }}</span>
+                        </div>
+                
+                        <!-- Bloco 9 -->
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">{{ interest }}</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>{{ i.9.publishedat }}</span>
+                            </div>
+                            <h2 class="mb-2"><a href="{{ i.9.url }}"> <a href="{% url 'add_to_historic' %}?url={{ i.9.url }}&title={{ i.9.title }}&description={{ i.9.description }}&image={{ i.9.image }}&publishedat={{ i.9.publishedat }}">{{ i.9.title }}</a></a></h2>
+                            <span class="author mb-3 d-block">{{ i.9.author }}</span>
+                        </div>
                         </div>
                       </div>
                     </div>
@@ -657,7 +680,7 @@
                     </a>
                     <div>
                       <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.0.publishedat  }}</span></div>
-                      <h3><a href={{ data_Culture.0.url }}>{{ data_Culture.0.title  }}</a></h3>
+                        <h3><a href={{ data_Culture.0.url }}><a href="{% url 'add_to_historic' %}?url={{ data_Culture.0.url }}&title={{ data_Culture.0.title }}&description={{ data_Culture.0.description }}&image={{ data_Culture.0.image }}&publishedat={{ data_Culture.0.publishedat }}">{{ data_Culture.0.title  }}</a></a></h3>
                       <p>{{ data_Culture.0.description }}</p>
                       <div class="d-flex align-items-center author">
                         <div class="name">
@@ -670,16 +693,16 @@
                   <div class="row">
                     <div class="col-lg-4">
                       <div class="post-entry-1 border-bottom">
-                        <a href="{{ data_Culture.1.url  }}"><img src={{ data_Culture.1.image  }}alt="" class="img-fluid"></a>
+                          <a href="{{ data_Culture.1.url  }}"><img src={{ data_Culture.1.image  }}alt="" class="img-fluid"></a>
                         <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.1.publishedat }}</span></div>
-                        <h2 class="mb-2"><a href={{ data_Culture.1.url  }}>{{ data_Culture.1.title  }}</a></h2>
+                          <h2 class="mb-2"><a href={{ data_Culture.1.url  }}>{{ data_Culture.1.title  }}</a></h2>
                         <span class="author mb-3 d-block">{{ data_Culture.1.author  }}</span>
                         <p class="mb-4 d-block">{{ data_Culture.1.description  }}</p>
                       </div>
       
                       <div class="post-entry-1">
                         <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>{{ data_Culture.2.publishedat }}</span></div>
-                        <h2 class="mb-2"><a href={{ data_Culture.2.url  }}>{{ data_Culture.2.title  }}</a></h2>
+                          <h2 class="mb-2"><a href={{ data_Culture.2.url  }}> </a></h2>
                         <span class="author mb-3 d-block">{{ data_Culture.2.author  }}</span>
                       </div>
                     </div>
