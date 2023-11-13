@@ -193,12 +193,16 @@
             {% if data %}
               {% for data in data %}
               <div class="d-md-flex post-entry-2 half">
+                {% if user.is_authenticated %}
+                <a href="{% url 'add_to_historic' %}?url={{ data.url }}&title={{ data.title }}&description={{ data.description }}&image={{ data.image }}&publishedat={{ data.publishedat }}" class="me-4 thumbnail">
+                {% else %}
                   <a href="{{ data.url }}" class="me-4 thumbnail">
+                {% endif %}
                       <img src="{{ data.image }}" alt="" class="img-fluid">
                   </a>
                   <div>
                       <div class="post-meta"><span>{{ data.publishedat }}</span></div>
-                      <h3><a href="{{ data.url }}">{{data.title}}</a></h3>
+                      <h3><a href="{% url 'add_to_historic' %}?url={{ data.url }}&title={{ data.title }}&description={{ data.description }}&image={{ data.image }}&publishedat={{ data.publishedat }}">{{data.title}}</a></h3>
                       <p>{{data.description}}</p>
                       <div class="d-flex align-items-center author">
                           <div class="name">
