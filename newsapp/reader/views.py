@@ -628,6 +628,7 @@ def add_to_historic(request):
     news_publishedat = request.GET.get("publishedat")
 
     if news_url:
+        user = User.objects.get(email=request.user)
         if request.user.is_authenticated:
             new = News.objects.create(
                 url=news_url,
@@ -636,9 +637,10 @@ def add_to_historic(request):
                 image=news_image,
                 created_at=news_publishedat,
             )
-            new.save()
-            user = User.objects.get(email=request.user)
-            user.user_news_historic.add(new)
+            historic_titles = user.user_news_historic.values_list("title", flat=True)
+            if news_title not in historic_titles:
+                new.save()
+                user.user_news_historic.add(new)
 
     return redirect(news_url)
 
