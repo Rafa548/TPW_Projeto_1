@@ -38,7 +38,7 @@ def user_login(request):
                 return redirect('Home')
             else:
                 messages.error(
-                    request, 'username or password is wrong', 'danger'
+                    request, 'email or password is wrong', 'danger'
                 )
                 return redirect('accounts:user_login')
     else:

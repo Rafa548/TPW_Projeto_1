@@ -16,28 +16,24 @@ class UserLoginForm(forms.Form):
         )
     )
 
-def validate_password(value, email, username):
+def validate_password(value, username):
     if len(value) < 8:
-        raise ValidationError("Password must be at least 8 characters long.")
+        raise forms.ValidationError("Password must be at least 8 characters long.")
 
     if not any(char in r'!@#$%^&*()+[]{}|;:,.<>?/`~' for char in value):
-        raise ValidationError("Password must contain at least one special character.")
+        raise forms.ValidationError("Password must contain at least one special character.")
 
     if not any(char.isdigit() for char in value):
-        raise ValidationError("Password must contain at least one number.")
+        raise forms.ValidationError("Password must contain at least one number.")
 
     if not any(char.isupper() for char in value):
-        raise ValidationError("Password must contain at least one uppercase letter.")
+        raise forms.ValidationError("Password must contain at least one uppercase letter.")
 
     if not any(char.islower() for char in value):
-        raise ValidationError("Password must contain at least one lowercase letter.")
-
-    email_prefix = email.split('@')[0]
-    if email_prefix in value:
-        raise ValidationError("Password cannot contain the part of your email.")
+        raise forms.ValidationError("Password must contain at least one lowercase letter.")
 
     if username in value:
-        raise ValidationError("Password cannot contain a substring of your username.")
+        raise forms.ValidationError("Password cannot contain a substring of your username.")
 
 class UserRegistrationForm(forms.Form):
     email = forms.EmailField(
@@ -55,15 +51,23 @@ class UserRegistrationForm(forms.Form):
             attrs={'class': 'form-control', 'placeholder': 'password'}
         )
     )
+
+
     def clean(self):
         cleaned_data = super().clean()
-        email = cleaned_data.get('email')
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email address is already in use.')
         username = cleaned_data.get('username')
         password = cleaned_data.get('password')
-
-        validate_password(password, email, username)
-
+        validate_password(password, username)
         return cleaned_data
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email address is already in use.')
+        return email
 
 
 class EditProfileForm(UserChangeForm):
@@ -117,7 +121,11 @@ class EditProfileForm(UserChangeForm):
             if not any(char.islower() for char in new_password):
                 raise forms.ValidationError("Password must contain at least one lowercase letter.")
         return new_password
-
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email address is already in use.')
+        return email
 class InterestsForm(forms.ModelForm):
     user_email = forms.EmailField(label='Your Email')
 
