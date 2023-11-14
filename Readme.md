@@ -70,6 +70,7 @@
     - `python3 manage.py add_users_with_interests` (adds users with interests)
     - `python3 manage.py add_users` (adds users)
 
+
 ### Usage:
 - Register, login, choose interests, and use the site normally
 - For testing chat between users, open a new incognito window with a different user
@@ -78,8 +79,29 @@
 - Configured but doesn't support user chat functionality
 - Use register/login/choose interests to use the site
 
+
+# Credentials (for testing if used the given commands)
+
+## Admin
+- **Email**: admin@default.com
+- **Password**: admin
+
+## Users (with interests)
+- **Email**: user3@example.com
+- **Password**: User3pass!
+
+- **Email**: user4@example.com
+- **Password**: User4pass!
+
+## Users (without interests)
+- **Email**: user1@example.com
+- **Password**: User1pass!
+
+- **Email**: user2@example.com
+- **Password**: User2pass!
+
+
 # Project Links
 
 - [GitHub Repository](https://github.com/Rafa548/TPW_Projeto): Link to the project's GitHub page.
 - [PythonAnywhere Deployment](http://rafa548.pythonanywhere.com/): Link to the deployed application on PythonAnywhere.
-
