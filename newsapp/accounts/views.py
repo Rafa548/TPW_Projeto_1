@@ -92,6 +92,9 @@ def edit_profile(request, userid):
 
 @login_required
 def save_interests(request):
+    user = request.user
+    cache_key = f"newsfeed_{user.id}"
+    cache.delete(cache_key)
     if request.method == 'POST':
         selected_interests = request.POST.getlist('interests')
         request.user.interests.set(Interest.objects.filter(name__in=selected_interests))
