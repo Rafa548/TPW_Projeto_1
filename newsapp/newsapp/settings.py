@@ -36,7 +36,7 @@ CACHES = {
 }
 CACHE_TIMEOUT = 30  # 10 mins
 
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 
 INSTALLED_APPS = [
@@ -70,8 +70,13 @@ MIDDLEWARE = [
 
 AXES_FAILURE_LIMIT = 3  # Lock out after 3 login attempts
 AXES_LOCK_OUT_AT_FAILURE = True  # Automatically lock out users
-AXES_USE_USER_AGENT = True  # Include user agent in tracking
 AXES_COOLOFF_TIME = 1  # Lockout for 1 minute
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',  
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 ROOT_URLCONF = 'newsapp.urls'
 

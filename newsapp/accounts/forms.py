@@ -122,6 +122,14 @@ class EditProfileForm(UserChangeForm):
                 raise forms.ValidationError("Password must contain at least one lowercase letter.")
         return new_password
     
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if self.instance.email != email:
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError('This email address is already in use.')
+
+        return email
+    
 class InterestsForm(forms.ModelForm):
     user_email = forms.EmailField(label='Your Email')
 
